@@ -1,6 +1,6 @@
 abstract class UnimibBikeEndpointUtil{
 
-  static final String address = 'http://192.168.10.102:8000/api/';
+  static final String address = 'http://192.168.1.220:8000/api/';
 
   static final String activeRentals = address + 'rentals/?active=yes';
   static final String racks = address + 'racks/';

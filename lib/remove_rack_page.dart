@@ -6,6 +6,8 @@ import 'package:unimib_bike_manager/model/rack_list.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
 
+import 'dart:async';
+
 //TODO: Implementare DropDownMenù per visualizzare la lista di rastrelliere.
 
 class RemoveRack extends StatefulWidget {
@@ -24,10 +26,23 @@ class _RemoveRackState extends State<RemoveRack> {
   User get _user => widget.user;
 
   final _formKey = GlobalKey<FormState>();
-  Future<RackList> rackList;
   bool _request = false;
 
   TextEditingController _controller = new TextEditingController();
+
+  Rack _rackSelected;
+  List _rack = List();
+
+  Future<String> getRackData() async{
+    var _rackData = await fetchRackList();
+
+    setState(() {
+      _rack = _rackData.racks;
+    });
+
+    print(_rackData.racks);
+    return "Success";
+  }
 
   @override
   void dispose(){
@@ -37,15 +52,14 @@ class _RemoveRackState extends State<RemoveRack> {
 
   @override
   void initState() {
-    rackList = fetchRackList();
-    _request = false;
     super.initState();
+    _request = false;
+    this.getRackData();
+
   }
 
   @override
   Widget build(BuildContext context) {
-
-
 
     return Scaffold(
       appBar: AppBar(
@@ -59,10 +73,35 @@ class _RemoveRackState extends State<RemoveRack> {
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
 
+              DropdownButton(
+                value: _rackSelected,
+                items: _rack.map((rack){
+                    return new DropdownMenuItem(
+                        child: Row(
+                          children: <Widget>[
+                            new Icon(Icons.apps),
+                            new SizedBox(width: 10.0,),
+                            new Text(rack.locationDescription),
+                          ],
+                        ),
+                      value: rack,
+                    );
+                  }).toList(),
+                hint: new Text("Seleziona Rastrelliera"),
+                onChanged: (newVal){
+                  print("You Selected: " + newVal.id.toString());
+                  setState(() {
+                    _rackSelected = newVal;
+
+                  });
+                },
+              ),
+              SizedBox(height: 15.0,),
               Align(
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: SizedBox(
                   width: 100.0,
                   child: RaisedButton(
@@ -73,7 +112,7 @@ class _RemoveRackState extends State<RemoveRack> {
                       ),
                       child: Text('Salva', style: TextStyle(color: Colors.white),),
                       onPressed: (){
-                        
+                        //deleteRack(_rackSelected OR _rackSelected.id.toString());
                       }
                   ),
                 ),

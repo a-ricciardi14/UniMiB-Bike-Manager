@@ -60,6 +60,8 @@ class _RemoveBikeState extends State<RemoveBike> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+
+
               new Row(
                 children: <Widget>[
                   new Flexible(

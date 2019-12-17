@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
 
 import 'package:unimib_bike_manager/model/user.dart';
-import 'package:unimib_bike_manager/functions/rent_funct.dart';
+import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 
 class ConfirmationPage extends StatefulWidget {

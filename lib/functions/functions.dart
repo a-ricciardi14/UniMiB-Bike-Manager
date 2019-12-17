@@ -29,27 +29,6 @@ Future<String> scan() async {
   }
 }
 
-//Funzione che passato l'id della bicicletta prova ad avviare il noleggio
-void tryRent(String id, BuildContext context) {
-  fetchBikeInfo(id).then((bike) {
-    if (bike.bikeState == 'Disponibile') {
-      String address =
-          bike.rack.addressLocality + ' ' + bike.rack.streetAddress;
-
-      Navigator.popAndPushNamed(context, '/confirmation',
-          arguments: <String, String>{
-            'bike': bike.id.toString(),
-            'rack': bike.rack.locationDescription,
-            'address': address,
-          });
-    } else {
-      showErrorDialog(context, 'Ops!', S.of(context).bike_not_avaiable);
-    }
-  }).catchError((e) {
-    showErrorDialog(context, 'Ops!', S.of(context).request_failed);
-  });
-}
-
 //Funzione che prova a chiudere un noleggio in corso
 void tryEndRent(String id, Rental rent, BuildContext context) {
   fetchRack(id).then((rack) {
@@ -153,81 +132,6 @@ void tryEndRent(String id, Rental rent, BuildContext context) {
         );
       });
 }*/
-
-void showRentDialog(BuildContext context) {
-
-  final controller = TextEditingController();
-  String id;
-
-  showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return SimpleDialog(
-          //title: Text(S.of(context).rent),
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
-                    child: TextField(
-                      controller: controller,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: S.of(context).bikeCode,
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.camera_alt),
-                  onPressed: () {
-                    scan().then((value) {
-                      if (value != 'Camera negated' && value != 'No read') {
-                        tryRent(value, context);
-                      } else {
-                        showErrorDialog(context, 'Ops!', value);
-                      }
-                    }).catchError((e) {
-                      showErrorDialog(context, 'Ops!', S.of(context).wrong);
-                    });
-                  },
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                FlatButton(
-                  child: Text(
-                    S.of(context).cancel,
-                    style: TextStyle(color: Color(0xFFFF4081)),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                FlatButton(
-                  child: Text(
-                    S.of(context).confirm,
-                    style: TextStyle(color: Color(0xFFFF4081)),
-                  ),
-                  onPressed: () {
-                    if (controller.text.isEmpty) {
-                      showErrorDialog(context, 'Ops!', S.of(context).id_empty);
-                    } else {
-                      id = controller.text;
-
-                      controller.clear();
-
-                      tryRent(id, context);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ],
-        );
-      });
-}
 
 //funzione che mostra il dialog per terminare il noleggio
 void showEndRentDialog(BuildContext context, Rental rent) {

@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
 
-import 'package:unimib_bike_manager/functions/rent_funct.dart';
+import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 import 'package:unimib_bike_manager/drawer.dart';
 import 'package:unimib_bike_manager/model/user.dart';

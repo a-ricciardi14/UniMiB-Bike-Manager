@@ -143,6 +143,8 @@ Future<void> putLocalDesc(String str, String rackId) async {
   }
 }
 
+Future<void> deleteRack(Rack _rack, String _desc) async {}
+
 //TODO: Implementare richiesta BackEnd --> fetchBikeList()
 //TODO: Implementare richiesta BackEnd --> fetchRackBikes(String)
 //TODO: Implemengtare richiesta BackEnd --> putBike(String, String)
@@ -163,7 +165,7 @@ Future<BikeList> fetchBikeList() async{
 }
 
 //funzione che fa il post() di una nuova biciletta --NON FUNZIONA--
-Future<void> postBike(String bikeId, int unCode, String rackId) async {
+Future<void> addBike(String bikeId, int unCode, String rackId) async {
 
   String url = UnimibBikeEndpointUtil.bikes + bikeId + '/';
   final response = await http.post(url,

@@ -65,6 +65,12 @@ class S implements WidgetsLocalizations {
   String get remove_bike => "Remove Bike";
   String get remove_failed => "Remove Failed";
   String get remove_rack => "Remove Rack";
+  String get rack_removed => "Rack Removed";
+  String get bike_added => "Bike Added";
+  String get unlock_code => "Unlock Code";
+  String get pass_wrong => "Unlock Code Wrong";
+
+
 
 
 
@@ -80,7 +86,7 @@ class $it_IT extends S {
   @override
   String get cancel => "Annulla";
   @override
-  String get rack_empty => "Campo id vuoto";
+  String get rack_empty => "Campo vuoto";
   @override
   String get rack_code => "Codice rastrelliera";
   @override
@@ -162,11 +168,19 @@ class $it_IT extends S {
   @override
   String get putBike_failed => "Impossibile aggiugere biciletta";
   @override
-  String get remove_bike => "Rimuovi Bicicletta";
+  String get remove_bike => "Rimuovi bicicletta";
   @override
   String get remove_failed => "Rimozione impossibile";
   @override
-  String get remove_rack => "Rimuovi Rastrelliera";
+  String get remove_rack => "Rimuovi rastrelliera";
+  @override
+  String get rack_removed => "Rastrelliera rimossa";
+  @override
+  String get bike_added => "Bicicletta aggiunta";
+  @override
+  String get unlock_code => "Codice di sblocco";
+  @override
+  String get pass_wrong => "Codice di sblocco sbagliato";
 }
 
 class $en extends S {

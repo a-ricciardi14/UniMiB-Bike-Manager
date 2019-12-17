@@ -1,7 +1,7 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:unimib_bike_manager/drawer.dart';
-import 'package:unimib_bike_manager/functions/rent_funct.dart';
+import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
@@ -61,7 +61,6 @@ class _RemoveBikeState extends State<RemoveBike> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
 
-
               new Row(
                 children: <Widget>[
                   new Flexible(
@@ -87,7 +86,7 @@ class _RemoveBikeState extends State<RemoveBike> {
                   ),
                   IconButton(
                     icon: Icon(Icons.photo_camera),
-                    onPressed: bike_scan,
+                    onPressed: scan,
                   )
                 ],
               ),
@@ -171,7 +170,7 @@ class _RemoveBikeState extends State<RemoveBike> {
   }
 
   //Funzione per scannerizare il qrcode del rack
-  Future bike_scan() async {
+  Future scan() async {
     try {
       String result = await BarcodeScanner.scan();
       setState(() => this.qrCode = result);

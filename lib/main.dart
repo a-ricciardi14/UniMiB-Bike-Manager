@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:unimib_bike_manager/add_bike_page.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:unimib_bike_manager/home_page.dart';
@@ -17,7 +18,6 @@ import 'splash_page.dart';
 import 'map.dart';
 import 'bikes_report_page.dart';
 import 'racks_page.dart';
-import 'rental_page.dart';
 import 'confirmation_page.dart';
 
 import 'package:unimib_bike_manager/authentication/authentication_bloc.dart';
@@ -118,8 +118,8 @@ class _MyAppState extends State<MyApp> {
             '/bikes_report': (context) => BikesReportPage(user: user),
             '/rack_list': (context) => RacksPage(user: user),
             '/bike_list': (context) => BikesPage(user: user),
-            '/rental': (context) => RentalPage(user: user),
             '/confirmation': (context) => ConfirmationPage(user: user),
+            '/bike_add': (context) => AddBike(user: user),
             '/bike_remove': (context) => RemoveBike(user: user),
             '/rack_add': (context) => AddRack(user: user),
             '/rack_remove': (context) => RemoveRack(user: user),

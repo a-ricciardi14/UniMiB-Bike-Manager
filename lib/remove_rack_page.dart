@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:unimib_bike_manager/drawer.dart';
+import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 import 'package:unimib_bike_manager/model/rack.dart';
-import 'package:unimib_bike_manager/model/rack_list.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
 
 import 'dart:async';
 
-//TODO: Implementare DropDownMenù per visualizzare la lista di rastrelliere.
+//TODO: Implementare DropDownMenù per visualizzare la lista di rastrelliere (funzionante, ma con errore => [ERROR:flutter/lib/ui/ui_dart_state.cc(157)] Unhandled Exception: type 'int' is not a subtype of type 'String'.
 
 class RemoveRack extends StatefulWidget {
 
@@ -33,7 +33,7 @@ class _RemoveRackState extends State<RemoveRack> {
   Rack _rackSelected;
   List _rack = List();
 
-  Future<String> getRackData() async{
+  Future<void> getRackData() async{
     var _rackData = await fetchRackList();
 
     setState(() {
@@ -41,7 +41,6 @@ class _RemoveRackState extends State<RemoveRack> {
     });
 
     print(_rackData.racks);
-    return "Success";
   }
 
   @override
@@ -61,6 +60,8 @@ class _RemoveRackState extends State<RemoveRack> {
   @override
   Widget build(BuildContext context) {
 
+    String description;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red[600],
@@ -76,7 +77,8 @@ class _RemoveRackState extends State<RemoveRack> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
 
-              DropdownButton(
+              new DropdownButton(
+                isExpanded: true,
                 value: _rackSelected,
                 items: _rack.map((rack){
                     return new DropdownMenuItem(
@@ -95,25 +97,60 @@ class _RemoveRackState extends State<RemoveRack> {
                   print("You Selected: " + newVal.id.toString());
                   setState(() {
                     _rackSelected = newVal;
-
                   });
                 },
               ),
               SizedBox(height: 15.0,),
+              Flexible(
+                child: new TextFormField(
+                  controller: _controller,
+                  decoration:
+                  InputDecoration(
+                    labelText:
+                    S.of(context).description,
+                    border:
+                    new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return S.of(context).rack_empty;
+                    } else {
+                      description = value;
+                    }
+                  },
+                ),
+              ),
+              SizedBox(height: 15.0,),
               Align(
-                alignment: Alignment.center,
+                alignment: Alignment.centerRight,
                 child: SizedBox(
                   width: 100.0,
                   child: RaisedButton(
-                      color: Colors.red[600],
-                      shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.red)
-                      ),
-                      child: Text('Salva', style: TextStyle(color: Colors.white),),
-                      onPressed: (){
-                        //deleteRack(_rackSelected OR _rackSelected.id.toString());
+                    color: Colors.red[600],
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.red)
+                    ),
+                    child: _request
+                        ? CircularProgressIndicator()
+                        : Text("Salva",style: TextStyle(color: Colors.white),),
+                    onPressed: _request ? null : () {
+                      if (_formKey.currentState.validate()) {
+                        setState(() => _request = true);
+
+                        deleteRack(_rackSelected, description).then((value) {
+                          showErrorDialog(context, S.of(context).success,
+                              S.of(context).rack_removed);
+                          setState(() => _request = false);
+                        }).catchError((e) {
+                          showErrorDialog(context, 'Ops!',
+                              S.of(context).rep_failed);
+                          setState(() => _request = false);
+                        });
                       }
+                    },
                   ),
                 ),
               ),

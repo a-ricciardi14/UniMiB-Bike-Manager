@@ -1,9 +1,8 @@
-//TODO: Impostare nuova LocationDescription() --> Aggiungere chiamata BackEnd per modificare effettvamente il parametro.
-//TODO: _showDialog() per modifica parametri --> Modificare funzione così che sia universale per ogni parametro che voglio modificare.
-//TODO: Card Position Rack --> Aggiungere onTap() la funzione _showDialog() per la modifica del parametro.
-//TODO: Card Available Stands --> Aggiungere onTap() la funzione _showDialog() per la modifica del parametro.
-//TODO: Card Available Bikes --> Modificare per renderlo un ExpansionTile così da mostrare la lista di biciclette associata alla Rastrelliera.
+//TODO: _displayDialog() per modifica parametri --> Capire come si comporta context per avere una sola Dialog per la modifica di più parametri.
+//TODO: Card Position Rack --> Aggiungere onTap() la funzione _showDialog() per la modifica del parametro oppure mostrare una input text tipo googleMaps per la posizione.
+//TODO: Card Available Bikes --> Modificare per renderlo un ExpansionTile così da mostrare la lista di biciclette associata alla Rastrelliera (non riesco a capire come verificare l'id del rack associato ad una bicicletta).
 //TODO: Card Delete Rack --> Aggiungere chiamata BackEnd per cancellare effettivamente la rastrelliera.
+//TODO: Card Total Stand --> Recuperare parametro capacity --> Viene visualizzato 'null';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -30,6 +29,38 @@ class _RackToolsPageState extends State<RackToolsPage> {
   Rack get _rack => widget.rack;
 
   TextEditingController _locationController = new TextEditingController();
+
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          title: Text("Modifica parametro: "),
+          content: new TextField(
+            controller: _locationController,
+          ),
+          actions: <Widget>[
+            MaterialButton(
+              elevation: 5.0,
+              textColor: Colors.red[600],
+              child: Text("Submit"),
+              onPressed: (){
+                if(context == _rack.locationDescription){
+                  setState(() {
+                    setLocalDesc(_locationController.text, _rack.id.toString());
+                  });
+                }else if(context == _rack.capacity){
+                  setState(() {
+
+                  });
+                }
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
 
   GoogleMapController mapController;
   Future<Position> currentLocation;
@@ -89,24 +120,7 @@ class _RackToolsPageState extends State<RackToolsPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 child: InkWell(
                   onTap: (){
-                    AlertDialog(
-                      title: Text("Modifica parametro: "),
-                      content: new TextField(
-                        controller: _locationController,
-                      ),
-                      actions: <Widget>[
-                        MaterialButton(
-                          elevation: 5.0,
-                          textColor: Colors.red[600],
-                          child: Text("Submit"),
-                          onPressed: (){
-                            setState(() {
-                              _rack.locationDescription = putLocalDesc(_locationController.text, _rack.id.toString());
-                            });
-                          },
-                        )
-                      ],
-                    );
+                    _displayDialog(context);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -159,7 +173,7 @@ class _RackToolsPageState extends State<RackToolsPage> {
                       children: <Widget>[
                         Icon(Icons.apps),
                         SizedBox(width: 40.0),
-                        Text('Stand Disponibili:' + _rack.availableStands.toString(),
+                        Text('Stand Totali:' + _rack.capacity.toString(),
                             overflow: TextOverflow.ellipsis),
                       ],
                     ),

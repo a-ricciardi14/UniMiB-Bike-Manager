@@ -101,28 +101,6 @@ class _RemoveRackState extends State<RemoveRack> {
                 },
               ),
               SizedBox(height: 15.0,),
-              Flexible(
-                child: new TextFormField(
-                  controller: _controller,
-                  decoration:
-                  InputDecoration(
-                    labelText:
-                    S.of(context).description,
-                    border:
-                    new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return S.of(context).rack_empty;
-                    } else {
-                      description = value;
-                    }
-                  },
-                ),
-              ),
-              SizedBox(height: 15.0,),
               Align(
                 alignment: Alignment.centerRight,
                 child: SizedBox(
@@ -140,7 +118,7 @@ class _RemoveRackState extends State<RemoveRack> {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
 
-                        deleteRack(_rackSelected, description).then((value) {
+                        deleteRack(_rackSelected.id.toString()).then((value) {
                           showErrorDialog(context, S.of(context).success,
                               S.of(context).rack_removed);
                           setState(() => _request = false);

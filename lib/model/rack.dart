@@ -3,6 +3,7 @@ import 'building_list.dart';
 
 class Rack {
   int _id;
+  int _capacity;
   int _availableStands;
   int _availableBikes;
   double _latitude;
@@ -15,6 +16,7 @@ class Rack {
 
   Rack(
       this._id,
+      this._capacity,
       this._availableStands,
       this._availableBikes,
       this._latitude,
@@ -28,6 +30,11 @@ class Rack {
   get id => _id;
   set id(value) {
     this._id = value;
+  }
+
+  get capacity => _capacity;
+  set capacity(value) {
+    this._capacity = value;
   }
 
   get availableStands => _availableStands;
@@ -82,6 +89,7 @@ class Rack {
 
       return Rack(
           json['id'],
+          json['capacity'],
           json['available_stands'],
           json['available_bikes'],
           double.parse(json['latitude']),
@@ -93,6 +101,7 @@ class Rack {
     } else {
       return Rack(
           json['id'],
+          json['capacity'],
           json['available_stands'],
           json['available_bikes'],
           double.parse(json['latitude']),
@@ -109,6 +118,8 @@ class Rack {
     String str = 'Rack{' +
         'id=' +
         id +
+        ', capacity' +
+        capacity +
         ', availableStands=' +
         availableStands +
         ', availableBikes=' +

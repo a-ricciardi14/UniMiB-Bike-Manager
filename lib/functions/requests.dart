@@ -124,11 +124,12 @@ Future<void> postReport(String id, String desc) async {
 
 
 //TODO: Implementare richiesta BackEnd --> putLocalDesc(String, String)
+//TODO: Implementare richiesta BackEnd --> deleteRack(
 
 //FUNZIONI PER RASTRELLIERE
 
 //funzione che fa il put per modificare il LocationDescription ---NON FUNZIONA---
-Future<void> putLocalDesc(String str, String rackId) async {
+Future<void> setLocalDesc(String str, String rackId) async {
 
   String url = UnimibBikeEndpointUtil.racks + rackId + '/';
 
@@ -143,17 +144,27 @@ Future<void> putLocalDesc(String str, String rackId) async {
   }
 }
 
-Future<void> deleteRack(Rack _rack, String _desc) async {}
+Future<void> deleteRack(String _rackId) async {
+
+  String url = UnimibBikeEndpointUtil.racks + _rackId + '/';
+  final response = await http.delete(url);
+
+  if (response.statusCode != 200){
+    print('Status Code: ' + response.statusCode.toString());
+    throw Exception('Failed to delete this bike');
+  }
+
+}
 
 //TODO: Implementare richiesta BackEnd --> fetchBikeList()
-//TODO: Implementare richiesta BackEnd --> fetchRackBikes(String)
-//TODO: Implemengtare richiesta BackEnd --> putBike(String, String)
+//TODO: Implemengtare richiesta BackEnd --> addBikeToRack(String, int, String)
+//TODO: Implemengtare richiesta BackEnd --> addBike(String)
 //TODO: Implementare richiesta BackEnd --> deleteBike(String)
 
 //FUNZIONI X BICICLETTE
 
 Future<BikeList> fetchBikeList() async{
-  String url = UnimibBikeEndpointUtil.bikes + '/';
+  String url = UnimibBikeEndpointUtil.bikes;
 
   final response = await http.get(url);
 
@@ -165,22 +176,42 @@ Future<BikeList> fetchBikeList() async{
 }
 
 //funzione che fa il post() di una nuova biciletta --NON FUNZIONA--
-Future<void> addBike(String bikeId, int unCode, String rackId) async {
+Future<void> addBikeToRack(String bikeId, int unCode, String rackId) async {
+
+  var _bikeList = await fetchBikeList();
+  for(int i=0; i<_bikeList.bikes.length; i++){
+    if(bikeId == _bikeList.bikes[i].id){
+      throw Exception("Id bicicletta già esistente");
+    }
+  }
 
   String url = UnimibBikeEndpointUtil.bikes + bikeId + '/';
   final response = await http.post(url,
       body: {'unlock_code': unCode, 'rack_id': int.parse(rackId), 'bike_state_id': 1});
 
-  if (response.statusCode == 200) {
-    Map<String, dynamic> map = json.decode(response.body);
+  if (response.statusCode != 200){
+    print('Status Code: ' + response.statusCode.toString());
+    throw Exception('Failed to add this bike');
+  }
+}
 
-    Bike bike = Bike.fromJson(map['bike']);
-    return bike;
+Future<void> addBike(String bikeId) async{
 
-  } else {
-    throw Exception('Failed to add new bike');
+  var _bikeList = await fetchBikeList();
+  for(int i=0; i<_bikeList.bikes.length; i++){
+    if(bikeId == _bikeList.bikes[i].id){
+      throw Exception("The ID already exists");
+    }
   }
 
+  String url = UnimibBikeEndpointUtil.bikes + bikeId + '/';
+  final response = await http.post(url,
+      body: {'unlock_code': null, 'rack_id': null, 'bike_state_id': 1});
+
+  if (response.statusCode != 200){
+    print('Status Code: ' + response.statusCode.toString());
+    throw Exception('Failed to add this bike');
+  }
 }
 
 //funzione che fa il delete() di una bicicletta --NON FUNZIONA--

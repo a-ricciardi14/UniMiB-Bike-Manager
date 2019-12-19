@@ -39,8 +39,6 @@ class _RemoveRackState extends State<RemoveRack> {
     setState(() {
       _rack = _rackData.racks;
     });
-
-    print(_rackData.racks);
   }
 
   @override
@@ -59,8 +57,6 @@ class _RemoveRackState extends State<RemoveRack> {
 
   @override
   Widget build(BuildContext context) {
-
-    String description;
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +90,6 @@ class _RemoveRackState extends State<RemoveRack> {
                   }).toList(),
                 hint: new Text("Seleziona Rastrelliera"),
                 onChanged: (newVal){
-                  print("You Selected: " + newVal.id.toString());
                   setState(() {
                     _rackSelected = newVal;
                   });
@@ -113,7 +108,7 @@ class _RemoveRackState extends State<RemoveRack> {
                     ),
                     child: _request
                         ? CircularProgressIndicator()
-                        : Text("Salva",style: TextStyle(color: Colors.white),),
+                        : Text("Salva",  style: TextStyle(color: Colors.white),),
                     onPressed: _request ? null : () {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);

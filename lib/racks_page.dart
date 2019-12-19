@@ -27,21 +27,12 @@ class _RacksPage extends State<RacksPage> {
   User get _user => widget.user;
 
   Future<RackList> rackList;
-  Future<Position> currentLocation;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  //funzione uguale a quella presente in map
-  Future<Position> fetchLocation() async {
-    return Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  }
-
 
   @override
   void initState() {
     rackList = fetchRackList();
-    currentLocation = fetchLocation();
-
     super.initState();
   }
 
@@ -179,7 +170,6 @@ class _RacksPage extends State<RacksPage> {
   Future<void> _onRefresh() async {
     setState(() {
       rackList = fetchRackList();
-      currentLocation = fetchLocation();
     });
   }
 

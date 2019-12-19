@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:unimib_bike_manager/model/bike.dart';
@@ -44,22 +45,6 @@ Future<RackList> fetchRackList() async {
   }
 }
 
-//funzione per fare la richiesta al server riguardo un determinato rack
-Future<Rack> fetchRack(String rackId) async {
-  String url = UnimibBikeEndpointUtil.racks + rackId + '/';
-
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    Map<String, dynamic> map = json.decode(response.body);
-    Map<String, dynamic> rack = map['rack'];
-
-    return Rack.fromJson(rack);
-  } else {
-    throw Exception('Failed to fetch rack info');
-  }
-}
-
 //funzione che restituisce le informazioni relative a una bicicletta
 Future<Bike> fetchBikeInfo(String bikeId) async {
   String url = UnimibBikeEndpointUtil.bikes + bikeId + '/';
@@ -76,20 +61,36 @@ Future<Bike> fetchBikeInfo(String bikeId) async {
   }
 }
 
-//funzione che fa il post per l'inizio del noleggio
-Future<Rental> postStartRent(String bikeId) async {
-  final response = await http.post(UnimibBikeEndpointUtil.rentals,
-      body: {'bike_id': bikeId});
+//funzione per fare la richiesta al server riguardo un determinato rack
+Future<Rack> fetchRack(String rackId) async {
+  String url = UnimibBikeEndpointUtil.racks + rackId + '/';
+
+  final response = await http.get(url);
+
   if (response.statusCode == 200) {
     Map<String, dynamic> map = json.decode(response.body);
+    Map<String, dynamic> rack = map['rack'];
 
-    Rental rental = Rental.fromJson(map['rental']);
-
-    return rental;
+    return Rack.fromJson(rack);
   } else {
-    throw Exception('Failed to start rent');
+    throw Exception('Failed to fetch rack info');
   }
 }
+
+////funzione che fa il post per l'inizio del noleggio
+//Future<Rental> postStartRent(String bikeId) async {
+//  final response = await http.post(UnimibBikeEndpointUtil.rentals,
+//      body: {'bike_id': bikeId});
+//  if (response.statusCode == 200) {
+//    Map<String, dynamic> map = json.decode(response.body);
+//
+//    Rental rental = Rental.fromJson(map['rental']);
+//
+//    return rental;
+//  } else {
+//    throw Exception('Failed to start rent');
+//  }
+//}
 
 //funzione che fa il put per terminare il noleggio
 Future<void> putEndRent(String rentId, String rackId) async {
@@ -102,18 +103,19 @@ Future<void> putEndRent(String rentId, String rackId) async {
   }
 }
 
-//funzione che ottiene la lista dei noleggi
-Future<RentalList> fetchRentalList() async {
-  final response = await http.get(UnimibBikeEndpointUtil.rentals);
-
-  if (response.statusCode == 200) {
-    return RentalList.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load rental list');
-  }
-}
+////funzione che ottiene la lista dei noleggi
+//Future<RentalList> fetchRentalList() async {
+//  final response = await http.get(UnimibBikeEndpointUtil.rentals);
+//
+//  if (response.statusCode == 200) {
+//    return RentalList.fromJson(json.decode(response.body));
+//  } else {
+//    throw Exception('Failed to load rental list');
+//  }
+//}
 
 //funzione che fa il post di un report
+
 Future<void> postReport(String id, String desc) async {
   final response = await http.post(UnimibBikeEndpointUtil.reports,
       body: {'bike_id': id, 'description': desc});
@@ -124,26 +126,46 @@ Future<void> postReport(String id, String desc) async {
 
 
 //TODO: Implementare richiesta BackEnd --> putLocalDesc(String, String)
-//TODO: Implementare richiesta BackEnd --> deleteRack(
+//TODO: Implementare richiesta BackEnd --> addRAck(int, int, String, Position) #funzione non testata.
+//TODO: Implementare richiesta BackEnd --> deleteRack(String)
 
 //FUNZIONI PER RASTRELLIERE
 
 //funzione che fa il put per modificare il LocationDescription ---NON FUNZIONA---
-Future<void> setLocalDesc(String str, String rackId) async {
+Future<void> setLocalDesc(String _locatDesc, String rackId) async {
 
   String url = UnimibBikeEndpointUtil.racks + rackId + '/';
 
   final response = await http.put(
       url,
       body: {
-        'location_description' : str,
+        'locationDescription' : _locatDesc,
       });
 
   if (response.statusCode != 200) {
     throw Exception('Failed to change LocalDescr');
   }
 }
+Future<void> addRack(int _rackId, int _capacity, String _locatDesc, Position _currentPosition) async {
+  String url = UnimibBikeEndpointUtil.racks;
 
+  final response = await http.post(
+    url,
+    body: {
+      'id' : _rackId,
+      'capacity' : _capacity,
+      'locationDescription' : _locatDesc,
+      'latitude' : _currentPosition.latitude,
+      'longitude' : _currentPosition.longitude,
+      'streetAddress' : _currentPosition.toString(),
+      'addressLocality' : '',
+    }
+  );
+
+  if(response.statusCode != 200){
+    throw Exception('Failed to post Rack');
+  }
+}
 Future<void> deleteRack(String _rackId) async {
 
   String url = UnimibBikeEndpointUtil.racks + _rackId + '/';
@@ -155,6 +177,7 @@ Future<void> deleteRack(String _rackId) async {
   }
 
 }
+
 
 //TODO: Implementare richiesta BackEnd --> fetchBikeList()
 //TODO: Implemengtare richiesta BackEnd --> addBikeToRack(String, int, String)

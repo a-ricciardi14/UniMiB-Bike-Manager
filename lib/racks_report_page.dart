@@ -5,6 +5,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 
 import 'package:unimib_bike_manager/drawer.dart';
+import 'package:unimib_bike_manager/model/rack.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
@@ -21,23 +22,39 @@ class RacksReportPage extends StatefulWidget {
 }
 
 class _RacksReportPage extends State<RacksReportPage> {
-  final _formKey = GlobalKey<FormState>();
-  bool _request = false;
+
   User get _user => widget.user;
-  String qrCode = '';
-  TextEditingController controller = new TextEditingController();
+
+
+  bool _request = false;
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _controllerDesc = new TextEditingController();
+
+  Rack _rackSelected;
+  List _rack = List();
+
+  Future<void> getRackData() async{
+    var _rackData = await fetchRackList();
+
+    setState(() {
+      _rack = _rackData.racks;
+    });
+  }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controllerDesc.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    _request = false;
-
     super.initState();
+
+    _request = false;
+    this.getRackData();
+
   }
 
   @override
@@ -58,37 +75,32 @@ class _RacksReportPage extends State<RacksReportPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Flexible(
-                    child: TextFormField(
-                      controller: controller,
-                      decoration:
-                      InputDecoration(
-                        labelText:
-                          S.of(context).rack_code,
-                          border:
-                            new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                          ),
+              new DropdownButton(
+                  isExpanded: true,
+                  value: _rackSelected,
+                  items: _rack.map((rack){
+                    return new DropdownMenuItem(
+
+                      child: Row(
+                        children: <Widget>[
+                          new Icon(Icons.apps),
+                          new SizedBox(width: 10.0,),
+                          new Text(rack.locationDescription),
+                        ],
                       ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return S.of(context).rack_empty;
-                        } else {
-                          rackId = value;
-                        }
-                      },
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.photo_camera),
-                    onPressed: scan,
-                  )
-                ],
+                      value: rack,
+                    );
+                  }).toList(),
+                  hint: new Text("Seleziona Rastrelliera"),
+                  onChanged: (newVal) {
+                    print("You Selected: " + newVal.id.toString());
+                    setState(() {
+                      _rackSelected = newVal;
+                    });
+                  }
               ),
               SizedBox(height: 12.0,),
-              TextFormField(
+              new TextFormField(
                 decoration:
                 InputDecoration(
                     labelText:
@@ -106,9 +118,7 @@ class _RacksReportPage extends State<RacksReportPage> {
                   }
                 },
               ),
-              SizedBox(
-                height: 15.0,
-              ),
+              SizedBox(height: 15.0,),
               Align(
                 alignment: Alignment.centerRight,
                 child: SizedBox(
@@ -126,7 +136,7 @@ class _RacksReportPage extends State<RacksReportPage> {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
 
-                        postReport(rackId, description).then((value) {
+                        postReport(_rackSelected.id.toString(), description).then((value) {
                           showErrorDialog(context, S.of(context).success,
                               S.of(context).rep_received);
                           setState(() => _request = false);
@@ -147,30 +157,4 @@ class _RacksReportPage extends State<RacksReportPage> {
     );
   }
 
-  //Funzione per scannerizare il qrcode
-  Future scan() async {
-    try {
-      String result = await BarcodeScanner.scan();
-      setState(() => this.qrCode = result);
-      setState(() => this.controller.text = result);
-
-      /*await BarcodeScanner.scan().then((value) => setState((){
-        this.controller.text = value;
-      }));*/
-    } on PlatformException catch (e) {
-      //Errore permessi non concessi
-      if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          this.qrCode = 'Permessi camera negati';
-        });
-      } else {
-        setState(() => this.qrCode = '$e');
-      }
-      //Errore di chiusura della fotocamera prima che il codice possa essere catturato
-    } on FormatException {
-      setState(() => this.qrCode = 'Non sono riuscito a leggere nulla');
-    } catch (e) {
-      setState(() => this.qrCode = '$e');
-    }
-  }
 }

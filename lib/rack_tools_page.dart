@@ -43,7 +43,7 @@ class _RackToolsPageState extends State<RackToolsPage> {
             MaterialButton(
               elevation: 5.0,
               textColor: Colors.red[600],
-              child: Text("Submit"),
+              child: Text("Salva"),
               onPressed: (){
                 if(context == _rack.locationDescription){
                   setState(() {
@@ -100,9 +100,8 @@ class _RackToolsPageState extends State<RackToolsPage> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          'Rack ' +
-            _rack.id.toString() +
-            ' Manage Page'
+          'Rastrelliera ' +
+            _rack.id.toString()
         ),
         centerTitle: true,
         backgroundColor: Colors.red[600],

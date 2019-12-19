@@ -45,42 +45,6 @@ class MyDrawer extends StatelessWidget {
               },
             ),
 
-            //Drawer --> RacksManagement
-            ExpansionTile(
-              leading: Icon(Icons.apps, color: Colors.black,),
-              backgroundColor: Colors.grey[200],
-              title: Text('Gestione Rastrelliere',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black
-                ),
-              ),
-
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.settings, color: Colors.grey[800],),
-                  title: Text('Gestisci Rastrielliera'),
-                  onTap: () {
-                    Navigator.pushNamed(context,'/rack_list');
-                    },
-                ),
-                ListTile(
-                  leading: Icon(Icons.add_circle_outline, color: Colors.green,),
-                  title: Text('Aggiungi Rastrelliera'),
-                  onTap: () {
-                    Navigator.pushNamed(context,'/rack_add');
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.remove_circle_outline, color: Colors.red[800],),
-                  title: Text('Rimuovi Rastrelliera'),
-                  onTap: () {
-                    Navigator.pushNamed(context,'/rack_remove');
-                  },
-                ),
-              ],
-            ),
-
             //Drawer --> BikesManagement
             ExpansionTile(
               leading: Icon(Icons.directions_bike, color: Colors.black),
@@ -112,6 +76,42 @@ class MyDrawer extends StatelessWidget {
                   title: Text('Rimuovi Bicicletta'),
                   onTap: () {
                     Navigator.pushNamed(context,'/bike_remove');
+                  },
+                ),
+              ],
+            ),
+
+            //Drawer --> RacksManagement
+            ExpansionTile(
+              leading: Icon(Icons.apps, color: Colors.black,),
+              backgroundColor: Colors.grey[200],
+              title: Text('Gestione Rastrelliere',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black
+                ),
+              ),
+
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.settings, color: Colors.grey[800],),
+                  title: Text('Gestisci Rastrielliera'),
+                  onTap: () {
+                    Navigator.pushNamed(context,'/rack_list');
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.add_circle_outline, color: Colors.green,),
+                  title: Text('Aggiungi Rastrelliera'),
+                  onTap: () {
+                    Navigator.pushNamed(context,'/rack_add');
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.remove_circle_outline, color: Colors.red[800],),
+                  title: Text('Rimuovi Rastrelliera'),
+                  onTap: () {
+                    Navigator.pushNamed(context,'/rack_remove');
                   },
                 ),
               ],

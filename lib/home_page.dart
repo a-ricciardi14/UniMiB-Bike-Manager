@@ -255,6 +255,7 @@ class _HomePageState extends State<HomePage> {
                             children: <Widget>[
                               Icon(Icons.settings, size: 60.0, color: Colors.grey[800],),
                               Padding(
+
                                 padding: const EdgeInsets.only(top: 3.0),
                                 child: Text("Gestisci Rastrelliera",
                                   style: TextStyle(

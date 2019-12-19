@@ -4,12 +4,6 @@ import 'package:unimib_bike_manager/model/user.dart';
 
 //TODO: Aggiungere a Card Segnalazioni --> onTap() Lista Segnalazioni.
 //TODO: Creare pagina per visualizzare la Lista Segnalazioni.
-//TODO: Eliminare da Card Rastrelliera bottone --> Segnala Rastrelliera .
-//TODO: Eliminare da Card Bicicletta bottone --> Segnala Bicicletta.
-//TODO: Aggiumgere a Card Rastrelliera bottone --> Aggiungi Rastrelliera.
-//TODO: Aggiumgere a Card Rastrelliera bottone --> Rimuovi Rastrelliera.
-//TODO: Aggiungere a Card Bicicletta bottone --> Gestisci Bicicletta (simile Gestisci Rastrelliere).
-
 
 class HomePage extends StatefulWidget {
 

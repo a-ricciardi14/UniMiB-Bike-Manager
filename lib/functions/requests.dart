@@ -146,7 +146,7 @@ Future<void> setLocalDesc(String _locatDesc, String rackId) async {
     throw Exception('Failed to change LocalDescr');
   }
 }
-Future<void> addRack(int _rackId, int _capacity, String _locatDesc, Position _currentPosition) async {
+Future<void> addRack(int _rackId, int _capacity, String _locatDesc) async {
   String url = UnimibBikeEndpointUtil.racks;
 
   final response = await http.post(
@@ -155,9 +155,9 @@ Future<void> addRack(int _rackId, int _capacity, String _locatDesc, Position _cu
       'id' : _rackId,
       'capacity' : _capacity,
       'locationDescription' : _locatDesc,
-      'latitude' : _currentPosition.latitude,
-      'longitude' : _currentPosition.longitude,
-      'streetAddress' : _currentPosition.toString(),
+      'latitude' : null,
+      'longitude' : null,
+      'streetAddress' : '',
       'addressLocality' : '',
     }
   );

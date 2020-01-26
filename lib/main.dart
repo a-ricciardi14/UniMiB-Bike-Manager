@@ -11,6 +11,7 @@ import 'package:unimib_bike_manager/racks_report_page.dart';
 import 'package:unimib_bike_manager/remove_bike_page.dart';
 import 'package:unimib_bike_manager/add_rack_page.dart';
 import 'package:unimib_bike_manager/remove_rack_page.dart';
+import 'package:unimib_bike_manager/reports_page.dart';
 
 import 'bikes_page.dart';
 import 'login.dart';
@@ -121,7 +122,7 @@ class _MyAppState extends State<MyApp> {
             '/bike_remove': (context) => RemoveBike(user: user),
             '/rack_add': (context) => AddRack(user: user),
             '/rack_remove': (context) => RemoveRack(user: user),
-
+            '/report_page': (context) => ReportsPage(user: user),
           },
           localizationsDelegates: [
             S.delegate,

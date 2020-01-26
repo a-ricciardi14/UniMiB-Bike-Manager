@@ -66,69 +66,64 @@ class _RemoveRackState extends State<RemoveRack> {
       drawer: MyDrawer(user: _user),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
-        child: new Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
 
-              new DropdownButton(
-                isExpanded: true,
-                value: _rackSelected,
-                items: _rack.map((rack){
-                    return new DropdownMenuItem(
-                        child: Row(
-                          children: <Widget>[
-                            new Icon(Icons.apps),
-                            new SizedBox(width: 10.0,),
-                            new Text(rack.locationDescription),
-                          ],
-                        ),
-                      value: rack,
-                    );
-                  }).toList(),
-                hint: new Text("Seleziona Rastrelliera"),
-                onChanged: (newVal){
-                  setState(() {
-                    _rackSelected = newVal;
-                  });
-                },
-              ),
-              SizedBox(height: 15.0,),
-              Align(
-                alignment: Alignment.centerRight,
-                child: SizedBox(
-                  width: 100.0,
-                  child: RaisedButton(
-                    color: Colors.red[600],
-                    shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.red)
-                    ),
-                    child: _request
-                        ? CircularProgressIndicator()
-                        : Text("Salva",  style: TextStyle(color: Colors.white),),
-                    onPressed: _request ? null : () {
-                      if (_formKey.currentState.validate()) {
-                        setState(() => _request = true);
-
-                        deleteRack(_rackSelected.id.toString()).then((value) {
-                          showErrorDialog(context, S.of(context).success,
-                              S.of(context).rack_removed);
-                          setState(() => _request = false);
-                        }).catchError((e) {
-                          showErrorDialog(context, 'Ops!',
-                              S.of(context).rep_failed);
-                          setState(() => _request = false);
-                        });
-                      }
-                    },
+            new DropdownButton(
+              isExpanded: true,
+              value: _rackSelected,
+              items: _rack.map((rack){
+                  return new DropdownMenuItem(
+                      child: Row(
+                        children: <Widget>[
+                          new Icon(Icons.apps),
+                          new SizedBox(width: 10.0,),
+                          new Text(rack.locationDescription),
+                        ],
+                      ),
+                    value: rack,
+                  );
+                }).toList(),
+              hint: new Text("Seleziona Rastrelliera"),
+              onChanged: (newVal){
+                setState(() {
+                  _rackSelected = newVal;
+                });
+              },
+            ),
+            SizedBox(height: 15.0,),
+            Align(
+              alignment: Alignment.centerRight,
+              child: SizedBox(
+                width: 100.0,
+                child: RaisedButton(
+                  color: Colors.red[600],
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.red)
                   ),
+                  child: _request
+                      ? CircularProgressIndicator()
+                      : Text("Salva",  style: TextStyle(color: Colors.white),),
+                  onPressed: _request ? null : () {
+                      setState(() => _request = true);
+
+                      deleteRack(_rackSelected.id.toString()).then((value) {
+                        showErrorDialog(context, S.of(context).success,
+                            S.of(context).rack_removed);
+                        setState(() => _request = false);
+                      }).catchError((e) {
+                        showErrorDialog(context, 'Ops!',
+                            'Eliminazione Fallita');
+                        setState(() => _request = false);
+                      });
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

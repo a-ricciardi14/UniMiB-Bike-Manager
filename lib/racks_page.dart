@@ -11,8 +11,6 @@ import 'package:unimib_bike_manager/functions/requests.dart';
 import 'model/user.dart';
 import 'model/rack_list.dart';
 
-//TODO: Attivare bottone e Implementare funzione per l'aggiunta di una rastrelliera.
-//TODO: Creare Pop_up o Pagina per l'aggiunta di una rastrelliera.
 
 class RacksPage extends StatefulWidget {
   final User user;
@@ -132,7 +130,11 @@ class _RacksPage extends State<RacksPage> {
                           child: FloatingActionButton(
                             backgroundColor: Colors.red[600],
                             child: Icon(Icons.add,),
-                            onPressed: null,
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(context, '/rack_add');
+                              });
+                            },
                           ),
                         ),
                       ),

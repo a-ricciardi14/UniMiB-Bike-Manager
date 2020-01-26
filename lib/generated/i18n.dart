@@ -72,6 +72,10 @@ class S implements WidgetsLocalizations {
   String get add_rack => "Add Rack";
   String get rack_capacity => "Rack Capacity";
   String get rack_locatDesc => "Rack Location Description";
+  String get bike_deleted => "Bike Removed";
+  String get delete_bike => "Remove Bike";
+
+
 
 }
 
@@ -185,6 +189,10 @@ class $it_IT extends S {
   String get rack_capacity => "Capacità Rastrelliera";
   @override
   String get rack_locatDesc => "Descrizione Posizione";
+  @override
+  String get bike_deleted => "Bicicletta rimossa";
+  @override
+  String get delete_bike => "Rimuovi Bicicletta";
 }
 
 class $en extends S {

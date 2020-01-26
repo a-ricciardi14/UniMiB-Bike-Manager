@@ -126,7 +126,7 @@ class _BikesReportPage extends State<BikesReportPage> {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
 
-                        postReport(bikeId, description).then((value) {
+                        postReport(bikeId, description, _user.hashCode).then((value) {
                           showErrorDialog(context, S.of(context).success,
                               S.of(context).rep_received);
                           setState(() => _request = false);

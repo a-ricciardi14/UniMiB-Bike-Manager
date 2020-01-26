@@ -1,14 +1,14 @@
-//TODO: _displayDialog() per modifica parametri --> Capire come si comporta context per avere una sola Dialog per la modifica di più parametri.
 //TODO: Card Position Rack --> Aggiungere onTap() la funzione _showDialog() per la modifica del parametro oppure mostrare una input text tipo googleMaps per la posizione.
-//TODO: Card Available Bikes --> Modificare per renderlo un ExpansionTile così da mostrare la lista di biciclette associata alla Rastrelliera (non riesco a capire come verificare l'id del rack associato ad una bicicletta).
-//TODO: Card Delete Rack --> Aggiungere chiamata BackEnd per cancellare effettivamente la rastrelliera.
-//TODO: Card Total Stand --> Recuperare parametro capacity --> Viene visualizzato 'null';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
+import 'package:unimib_bike_manager/generated/i18n.dart';
+import 'package:unimib_bike_manager/model/bike.dart';
+import 'package:unimib_bike_manager/model/bike_list.dart';
 import 'package:unimib_bike_manager/model/rack.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/drawer.dart';
@@ -28,37 +28,156 @@ class _RackToolsPageState extends State<RackToolsPage> {
   User get _user => widget.user;
   Rack get _rack => widget.rack;
 
-  TextEditingController _locationController = new TextEditingController();
+  TextEditingController _editingController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  _displayDialog(BuildContext context) async {
+  bool _request = false;
+
+  Future<BikeList> _bikeList;
+
+  _displayDialog(BuildContext context, var key) async {
+    _editingController.text = '';
+    int _newCapacity;
+    String _localDesc = '';
+
     return showDialog(
       context: context,
-      builder: (context){
-        return AlertDialog(
-          title: Text("Modifica parametro: "),
-          content: new TextField(
-            controller: _locationController,
-          ),
-          actions: <Widget>[
-            MaterialButton(
-              elevation: 5.0,
-              textColor: Colors.red[600],
-              child: Text("Salva"),
-              onPressed: (){
-                if(context == _rack.locationDescription){
-                  setState(() {
-                    setLocalDesc(_locationController.text, _rack.id.toString());
-                  });
-                }else if(context == _rack.capacity){
-                  setState(() {
+      builder: (context) {
+        if(key is String){
+          return Form(
+            key: _formKey,
+            child: new AlertDialog(
+              title: Text("Modifica parametro: "),
+              content: new TextFormField(
+                controller: _editingController,
+                validator: (value){
+                  if(value.isEmpty){
+                    S.of(context).desc_empty;
+                  }else{
+                    _localDesc = value;
+                  }
+                },
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  elevation: 5.0,
+                  textColor: Colors.red[600],
+                  child: Text("Salva"),
+                  onPressed: _request ? null : () {
+                    if (_formKey.currentState.validate()) {
+                      setState(() => _request = true);
+                      setRacksParameters(key, _rack).then((value) {
+                        showErrorDialog(context, S.of(context).success,
+                            'Parametro modificato!');
+                        setState(() => _request = false);
+                      }).catchError((e) {
+                        showErrorDialog(context, 'Ops!',
+                            S.of(context).service_exception);
+                        setState(() => _request = false);
+                      });
+                    }
+                  }
+                )
+              ],
+            ),
+          );
+        }else if(key is int){
+          return Form(
+            key: _formKey,
+            child: new AlertDialog(
+              title: Text("Modifica parametro: "),
+              content: new TextFormField(
+                keyboardType: TextInputType.number,
+                controller: _editingController,
+                validator: (value){
+                  if(value.isEmpty){
+                    return S.of(context).desc_empty;
+                  }else{
+                    if(int.parse(_editingController.text) < key){
+                      return S.of(context).wrong;
+                    }else{
+                      _newCapacity = int.parse(_editingController.text);
+                    }
+                  }
+                },
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                    elevation: 5.0,
+                    textColor: Colors.red[600],
+                    child: Text("Salva"),
+                    onPressed: _request ? null : () {
+                      if (_formKey.currentState.validate()) {
+                        setState(() => _request = true);
+                        setRacksParameters(_newCapacity, _rack).then((value) {
+                          showErrorDialog(context, S.of(context).success,
+                              'Parametro modificato!');
+                          setState(() => _request = false);
+                        }).catchError((e) {
+                          showErrorDialog(context, 'Ops!',
+                              S.of(context).service_exception);
+                          setState(() => _request = false);
+                        });
+                      }
+                    }
+                )
+              ],
+            ),
+          );
+        }
+      }
+      );
+  }
 
-                  });
+  _showRackBikes(BuildContext context, Rack _tempRack){
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return new AlertDialog(
+            title: Text("Lista biciclette della rastrelliera: "),
+            content: new FutureBuilder(
+              future: _bikeList,
+              builder: (context, bikeSnap){
+                if(bikeSnap.hasData){
+                  return new ListView.builder(
+                      itemCount: bikeSnap.data.bikes == null
+                          ? 0
+                          : bikeSnap.data.bikes.length,
+                      itemBuilder: (context, index){
+                        Bike _tempBike = bikeSnap.data.bikes[index];
+                        return new Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            _tempBike.rack.id == _tempRack.id ?
+                            new Row(
+                              children: <Widget>[
+                                new Icon(Icons.directions_bike, size: 30.0, color: Colors.green[600],),
+                                new SizedBox(width: 20.0,),
+                                new Text(
+                                  'Bicicletta id: ',
+                                  style: TextStyle(
+                                    fontSize: 24.0,
+                                  ),
+                                ),
+                                new Text(
+                                  _tempBike.id.toString(),
+                                  style: TextStyle(
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ) : new Container(height: 0.0,),
+                          ],
+                        );
+                      });
+                }else if(bikeSnap.hasError){
+                  throw Exception('Failed to build BikeList');
                 }
               },
-            )
-          ],
-        );
-      }
+            ),
+          );
+        }
     );
   }
 
@@ -91,6 +210,8 @@ class _RackToolsPageState extends State<RackToolsPage> {
 
   @override
   void initState() {
+    _request = false;
+    _bikeList = fetchBikeList();
     super.initState();
   }
 
@@ -119,7 +240,7 @@ class _RackToolsPageState extends State<RackToolsPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 child: InkWell(
                   onTap: (){
-                    _displayDialog(context);
+                    _displayDialog(context, _rack.locationDescription);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -163,7 +284,8 @@ class _RackToolsPageState extends State<RackToolsPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 child: InkWell(
                   onTap: (){
-
+                    _displayDialog(context, _rack.capacity);
+                    _onRefresh();
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -186,6 +308,7 @@ class _RackToolsPageState extends State<RackToolsPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 child: InkWell(
                   onTap: (){
+                    _showRackBikes(context, _rack);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -208,7 +331,15 @@ class _RackToolsPageState extends State<RackToolsPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 color: Colors.red[600],
                 child: InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    setState(() => _request = true);
+
+                    deleteRack(_rack.id.toString()).then((value) {
+                      showErrorDialog(context, S.of(context).success,
+                          S.of(context).rack_removed);
+                      setState(() => _request = false);
+                    });
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Text(
@@ -223,6 +354,7 @@ class _RackToolsPageState extends State<RackToolsPage> {
                   ),
                 ),
               ),
+
               //Google Maps Card
               Card(
                 margin: EdgeInsets.all(5.0),

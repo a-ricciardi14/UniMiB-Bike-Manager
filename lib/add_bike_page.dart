@@ -62,6 +62,7 @@ class _AddBikeState extends State<AddBike> {
     int _unlockCode;
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.red[600],
         title: Text(S.of(context).add_bike),
@@ -177,27 +178,15 @@ class _AddBikeState extends State<AddBike> {
                     onPressed: _request ? null : () {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
-                        if(_unlockCode != null && _rackSelected != null){
-                          addBikeToRack(bikeId, _unlockCode, _rackSelected.id.toString()).then((value) {
-                            showErrorDialog(context, S.of(context).success,
-                                S.of(context).add_bike);
-                            setState(() => _request = false);
-                          }).catchError((e) {
-                            showErrorDialog(context, 'Ops!',
-                                S.of(context).rep_failed);
-                            setState(() => _request = false);
-                          });
-                        }else{
-                          addBike(bikeId).then((value){
-                            showErrorDialog(context, S.of(context).success,
-                                S.of(context).add_bike);
-                            setState(() => _request = false);
-                          }).catchError((e) {
-                            showErrorDialog(context, 'Ops!',
-                                S.of(context).rep_failed);
-                            setState(() => _request = false);
-                          });
-                        }
+                        addBike(bikeId, _unlockCode, _rackSelected.id.toString()).then((value) {
+                          showErrorDialog(context, S.of(context).success,
+                              S.of(context).add_bike);
+                          setState(() => _request = false);
+                        }).catchError((e) {
+                          showErrorDialog(context, 'Ops!',
+                              'Failed to add Bike to Rack');
+                          setState(() => _request = false);
+                        });
                       }
                     },
                   ),

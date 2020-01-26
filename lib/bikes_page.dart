@@ -139,7 +139,11 @@ class _BikesPageState extends State<BikesPage> {
                           child: FloatingActionButton(
                             backgroundColor: Colors.red[600],
                             child: Icon(Icons.add,),
-                            onPressed: null,
+                            onPressed: () {
+                              setState(() {
+                                Navigator.pushNamed(context, '/bike_add');
+                              });
+                            },
                           ),
                         ),
                       ),

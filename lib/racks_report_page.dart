@@ -59,7 +59,6 @@ class _RacksReportPage extends State<RacksReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    String rackId;
     String description;
 
     return Scaffold(
@@ -136,7 +135,7 @@ class _RacksReportPage extends State<RacksReportPage> {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
 
-                        postReport(_rackSelected.id.toString(), description).then((value) {
+                        postReport(_rackSelected.id.toString(), description, _user.hashCode).then((value) {
                           showErrorDialog(context, S.of(context).success,
                               S.of(context).rep_received);
                           setState(() => _request = false);

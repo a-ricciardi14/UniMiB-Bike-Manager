@@ -61,7 +61,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.settings, color: Colors.grey[800],),
                   title: Text('Gestisci Bicicletta'),
                   onTap: () {
-                    Navigator.pushNamed(context,'/bikes_report');
+                    Navigator.pushNamed(context,'/bike_list');
                   },
                 ),
                 ListTile(
@@ -133,7 +133,7 @@ class MyDrawer extends StatelessWidget {
                   leading: Icon(Icons.list, color: Colors.grey[800],),
                   title: Text('Lista Segnalazioni'),
                   onTap: () {
-                    Navigator.pushNamed(context,'');
+                    Navigator.pushNamed(context,'/report_page');
                   },
                 ),
                 ListTile(

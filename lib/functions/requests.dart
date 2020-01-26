@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:unimib_bike_manager/model/bike.dart';
@@ -9,8 +8,7 @@ import 'package:unimib_bike_manager/model/rack.dart';
 import 'package:unimib_bike_manager/model/rental.dart';
 import 'package:unimib_bike_manager/model/ip_address.dart';
 import 'package:unimib_bike_manager/model/rack_list.dart';
-import 'package:unimib_bike_manager/model/rental_list.dart';
-
+import 'package:unimib_bike_manager/model/report_list.dart';
 
 
 //richiede il noleggio ancora attivo
@@ -116,36 +114,58 @@ Future<void> putEndRent(String rentId, String rackId) async {
 
 //funzione che fa il post di un report
 
-Future<void> postReport(String id, String desc) async {
+Future<void> postReport(String id, String desc, int _userId) async {
   final response = await http.post(UnimibBikeEndpointUtil.reports,
-      body: {'bike_id': id, 'description': desc});
+      body: {'bike_id': id, 'description': desc, 'userId': _userId});
   if (response.statusCode != 200) {
     throw Exception('Unable to post report');
   }
 }
 
+//FUNZIONE X REPORT
+Future<ReportList> fetchReportsList() async {
+  String url = UnimibBikeEndpointUtil.reports;
 
-//TODO: Implementare richiesta BackEnd --> putLocalDesc(String, String)
-//TODO: Implementare richiesta BackEnd --> addRAck(int, int, String, Position) #funzione non testata.
-//TODO: Implementare richiesta BackEnd --> deleteRack(String)
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    return ReportList.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to load report list');
+  }
+}
+
+
+//TODO: Implementare richiesta BackEnd --> addRAck(int, int, String) #funzione non testata.
 
 //FUNZIONI PER RASTRELLIERE
 
-//funzione che fa il put per modificare il LocationDescription ---NON FUNZIONA---
-Future<void> setLocalDesc(String _locatDesc, String rackId) async {
+Future<void> setRacksParameters(var key, Rack _rack) async {
+  String url = UnimibBikeEndpointUtil.racks + _rack.id.toString() + '/';
 
-  String url = UnimibBikeEndpointUtil.racks + rackId + '/';
+  if(key is String){
+    final response = await http.put(
+        url,
+        body: {
+          'locationDescription' : key,
+        });
 
-  final response = await http.put(
-      url,
-      body: {
-        'locationDescription' : _locatDesc,
-      });
+    if (response.statusCode != 200) {
+      throw Exception('Failed to change LocalDescr');
+    }
+  }else if(key is int){
+    final response = await http.put(
+        url,
+        body: {
+          'capacity' : key,
+        });
 
-  if (response.statusCode != 200) {
-    throw Exception('Failed to change LocalDescr');
+    if (response.statusCode != 200) {
+      throw Exception('Failed to change capacity');
+    }
   }
 }
+
 Future<void> addRack(int _rackId, int _capacity, String _locatDesc) async {
   String url = UnimibBikeEndpointUtil.racks;
 
@@ -166,6 +186,7 @@ Future<void> addRack(int _rackId, int _capacity, String _locatDesc) async {
     throw Exception('Failed to post Rack');
   }
 }
+
 Future<void> deleteRack(String _rackId) async {
 
   String url = UnimibBikeEndpointUtil.racks + _rackId + '/';
@@ -173,18 +194,44 @@ Future<void> deleteRack(String _rackId) async {
 
   if (response.statusCode != 200){
     print('Status Code: ' + response.statusCode.toString());
-    throw Exception('Failed to delete this bike');
+    throw Exception('Failed to delete this rack');
   }
 
 }
 
 
-//TODO: Implementare richiesta BackEnd --> fetchBikeList()
-//TODO: Implemengtare richiesta BackEnd --> addBikeToRack(String, int, String)
-//TODO: Implemengtare richiesta BackEnd --> addBike(String)
-//TODO: Implementare richiesta BackEnd --> deleteBike(String)
 
 //FUNZIONI X BICICLETTE
+
+Future<void> setBikeUnCode(int _cod, Bike _bike) async {
+  String url = UnimibBikeEndpointUtil.bikes + _bike.id.toString() + '/';
+
+
+    final response = await http.put(
+        url,
+        body: {
+          'unlock_code' : _cod,
+        });
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to change UnlockCode');
+    }
+}
+
+Future<void> setBikeDisp(int _disp, Bike _bike) async {
+  String url = UnimibBikeEndpointUtil.bikes + _bike.id.toString() + '/';
+
+  final response = await http.put(
+      url,
+      body: {
+        'id' : _bike.id,
+        'bike_state_id' : _disp,
+      });
+
+  if (response.statusCode != 200) {
+    throw Exception('Failed to change UnlockCode');
+  }
+}
 
 Future<BikeList> fetchBikeList() async{
   String url = UnimibBikeEndpointUtil.bikes;
@@ -198,46 +245,35 @@ Future<BikeList> fetchBikeList() async{
   }
 }
 
-//funzione che fa il post() di una nuova biciletta --NON FUNZIONA--
-Future<void> addBikeToRack(String bikeId, int unCode, String rackId) async {
+//funzione che fa il post() di una nuova biciletta
+Future<void> addBike(String bikeId, int unCode, String rackId) async {
 
   var _bikeList = await fetchBikeList();
+
   for(int i=0; i<_bikeList.bikes.length; i++){
     if(bikeId == _bikeList.bikes[i].id){
       throw Exception("Id bicicletta già esistente");
     }
   }
 
-  String url = UnimibBikeEndpointUtil.bikes + bikeId + '/';
-  final response = await http.post(url,
-      body: {'unlock_code': unCode, 'rack_id': int.parse(rackId), 'bike_state_id': 1});
+  String url = UnimibBikeEndpointUtil.bikes;
+
+  final response = await http.post(
+      url,
+      body: {
+        'id' : bikeId,
+        'unlock_code': unCode,
+        'rack_id': int.parse(rackId),
+      });
 
   if (response.statusCode != 200){
     print('Status Code: ' + response.statusCode.toString());
     throw Exception('Failed to add this bike');
   }
+
 }
 
-Future<void> addBike(String bikeId) async{
-
-  var _bikeList = await fetchBikeList();
-  for(int i=0; i<_bikeList.bikes.length; i++){
-    if(bikeId == _bikeList.bikes[i].id){
-      throw Exception("The ID already exists");
-    }
-  }
-
-  String url = UnimibBikeEndpointUtil.bikes + bikeId + '/';
-  final response = await http.post(url,
-      body: {'unlock_code': null, 'rack_id': null, 'bike_state_id': 1});
-
-  if (response.statusCode != 200){
-    print('Status Code: ' + response.statusCode.toString());
-    throw Exception('Failed to add this bike');
-  }
-}
-
-//funzione che fa il delete() di una bicicletta --NON FUNZIONA--
+//funzione che fa il delete() di una bicicletta
 Future<void> deleteBike(String bikeId) async {
 
   String url = UnimibBikeEndpointUtil.bikes + bikeId + '/';

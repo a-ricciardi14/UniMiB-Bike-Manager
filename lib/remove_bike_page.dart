@@ -25,7 +25,7 @@ class _RemoveBikeState extends State<RemoveBike> {
   User get _user => widget.user;
 
   final _formKey = GlobalKey<FormState>();
-  bool _request = false;
+  bool _request;
   String qrCode = '';
 
   TextEditingController _controller = new TextEditingController();
@@ -107,51 +107,20 @@ class _RemoveBikeState extends State<RemoveBike> {
                           fetchBikeInfo(bikeId).then((_bike){
                             setState(() => _request = true);
 
-                            print("Bike State: " + _bike.bikeState);
+                            //print("Bike State: " + _bike.bikeState);
 
-                            switch(_bike.bikeState){
-
-                              case "Disponbile":{
-                                print('This is BIKE_ID: ' + bikeId);
-                                deleteBike(bikeId).then((value){
-                                  showErrorDialog(context, S.of(context).bike_received, "Bicicletta eliminata!");
-                                }).catchError((e){
-                                  showErrorDialog(context, "Ops!", S.of(context).remove_failed);
-                                });
-                              }
-                              break;
-
-                              case "Prenotata":{
-                                print("This is BIKE_ID: " + bikeId);
-                                setState(() {
-                                  _bike.bikeState = 1;
-                                  print("This is BIKE_State: " + _bike.bikeState);
-                                  deleteBike(bikeId).then((value){
-                                    showErrorDialog(context, S.of(context).bike_received, "Bicicletta eliminata!");
-                                  }).catchError((e){
-                                    showErrorDialog(context, "Ops!", S.of(context).remove_failed);
-                                  });
-                                });
-                              }
-                              break;
-
-                              case "Noleggiata":{
-                                showErrorDialog(context, S.of(context).bike_not_avaiable, "Bicicletta in noleggio!");
+                            if(_bike.bikeState == "Disponibile"){
+                              print('This is BIKE_ID: ' + bikeId);
+                              deleteBike(bikeId).then((value){
+                                showErrorDialog(context, S.of(context).bike_deleted, "Bicicletta eliminata!");
                                 setState(() => _request = false);
-                              }
-                              break;
-
-                              case "Smarrita":{
-                                showErrorDialog(context, S.of(context).bike_not_avaiable, "Bicicletta smarrita!");
+                              }).catchError((e){
+                                showErrorDialog(context, "Ops!", S.of(context).remove_failed);
                                 setState(() => _request = false);
-                              }
-                              break;
-
-                              case "Manutenzione":{
-                                showErrorDialog(context, S.of(context).bike_not_avaiable, "Bicicletta in manutenzione");
-                                setState(() => _request = false);
-                              }
-                              break;
+                              });
+                            }else{
+                              showErrorDialog(context, S.of(context).bike_not_avaiable, "Bicicletta prenotata!");
+                              setState(() => _request = false);
                             }
                           }).catchError((e){
                             showErrorDialog(context, "OPS!", "Failed to manage bike!");

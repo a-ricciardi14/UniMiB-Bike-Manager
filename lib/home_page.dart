@@ -4,11 +4,6 @@ import 'package:unimib_bike_manager/model/user.dart';
 
 //TODO: Aggiungere a Card Segnalazioni --> onTap() Lista Segnalazioni.
 //TODO: Creare pagina per visualizzare la Lista Segnalazioni.
-//TODO: Eliminare da Card Rastrelliera bottone --> Segnala Rastrelliera .
-//TODO: Eliminare da Card Bicicletta bottone --> Segnala Bicicletta.
-//TODO: Aggiumgere a Card Rastrelliera bottone --> Aggiungi Rastrelliera.
-//TODO: Aggiumgere a Card Rastrelliera bottone --> Rimuovi Rastrelliera.
-//TODO: Aggiungere a Card Bicicletta bottone --> Gestisci Bicicletta (simile Gestisci Rastrelliere).
 
 
 class HomePage extends StatefulWidget {
@@ -41,6 +36,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         //title: Text('Home Page'),
         centerTitle: true,
@@ -108,106 +104,110 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
+                child: SizedBox(
+                  width: 200.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
 
-                    //Racks Management --> #1 Icon-Button
-                    Container(
-                      child: RawMaterialButton(
-                        onPressed: (){
-                          setState(() {
-                            Navigator.pushNamed(context, '/bike_list');
-                          });
-                        },
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.settings, size: 60.0, color: Colors.grey[800],),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 3.0),
-                              child: Text("Gestisci Biciclette",
-                                style: TextStyle(
-                                    fontSize: 18.0
+                      //Racks Management --> #1 Icon-Button
+                      Container(
+                        child: RawMaterialButton(
+                          onPressed: (){
+                            setState(() {
+                              Navigator.pushNamed(context, '/bike_list');
+                            });
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Icon(Icons.settings, size: 60.0, color: Colors.grey[800],),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 3.0),
+                                child: Text("Gestisci Biciclette",
+                                  style: TextStyle(
+                                      fontSize: 18.0
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
+                          elevation: 2.0,
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(18.0),
+                              )
+                          ),
+                          fillColor: Colors.grey[300],
+                          padding: EdgeInsets.all(15.0),
                         ),
-                        elevation: 2.0,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(18.0),
-                            )
-                        ),
-                        fillColor: Colors.grey[300],
-                        padding: EdgeInsets.all(15.0),
                       ),
-                    ),
 
-                    //Racks Management --> #2 Icon-Button
-                    Container(
-                      child: RawMaterialButton(
-                        onPressed: (){
-                          setState(() {
-                            Navigator.pushNamed(context, '/bike_add');
-                          });
-                        },
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.add_circle_outline, size: 60.0, color: Colors.green[600],),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 3.0),
-                              child: Text("Aggiungi Bicicletta",
-                                style: TextStyle(
-                                    fontSize: 18.0
+                      //Racks Management --> #2 Icon-Button
+                      Container(
+                        child: RawMaterialButton(
+                          onPressed: (){
+                            setState(() {
+                              Navigator.pushNamed(context, '/bike_add');
+                            });
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Icon(Icons.add_circle_outline, size: 60.0, color: Colors.green[600],),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 3.0),
+                                child: Text("Aggiungi Bicicletta",
+                                  style: TextStyle(
+                                      fontSize: 18.0
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
+                          elevation: 2.0,
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(18.0),
+                              )
+                          ),
+                          fillColor: Colors.grey[300],
+                          padding: EdgeInsets.all(15.0),
                         ),
-                        elevation: 2.0,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(18.0),
-                            )
-                        ),
-                        fillColor: Colors.grey[300],
-                        padding: EdgeInsets.all(15.0),
                       ),
-                    ),
 
-                    //Racks Management --> #3 Icon-Button
-                    Container(
-                      child: RawMaterialButton(
-                        onPressed: (){
-                          setState(() {
-                            Navigator.pushNamed(context, '/bike_remove');
-                          });
-                        },
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.remove_circle_outline, size: 60.0, color: Colors.red[800],),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 3.0),
-                              child: Text("Rimuovi Bicicletta",
-                                style: TextStyle(
-                                    fontSize: 18.0
+                      //Racks Management --> #3 Icon-Button
+                      Container(
+                        child: RawMaterialButton(
+                          onPressed: (){
+                            setState(() {
+                              Navigator.pushNamed(context, '/bike_remove');
+                            });
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              Icon(Icons.remove_circle_outline, size: 60.0, color: Colors.red[800],),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 3.0),
+                                child: Text("Rimuovi Bicicletta",
+                                  style: TextStyle(
+                                      fontSize: 18.0
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
+                          elevation: 2.0,
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(18.0),
+                              )
+                          ),
+                          fillColor: Colors.grey[300],
+                          padding: EdgeInsets.all(15.0),
                         ),
-                        elevation: 2.0,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(18.0),
-                            )
-                        ),
-                        fillColor: Colors.grey[300],
-                        padding: EdgeInsets.all(15.0),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               )
             ],
@@ -246,105 +246,109 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    //Racks Management --> #1 Icon-Button
-                    Container(
-                        child: RawMaterialButton(
-                          onPressed: (){
-                            setState(() {
-                              Navigator.pushNamed(context, '/rack_list');
-                            });
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.settings, size: 60.0, color: Colors.grey[800],),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: Text("Gestisci Rastrelliera",
-                                  style: TextStyle(
-                                      fontSize: 18.0
+                child: SizedBox(
+                  width: 200.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      //Racks Management --> #1 Icon-Button
+                      Container(
+                          child: RawMaterialButton(
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(context, '/rack_list');
+                              });
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.settings, size: 60.0, color: Colors.grey[800],),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3.0),
+                                  child: Text("Gestisci Rastrelliera",
+                                    style: TextStyle(
+                                        fontSize: 18.0
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          elevation: 2.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(18.0),
-                              )
-                          ),
-                          fillColor: Colors.grey[300],
-                          padding: EdgeInsets.all(15.0),
-                        )
-                    ),
+                                )
+                              ],
+                            ),
+                            elevation: 2.0,
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(18.0),
+                                )
+                            ),
+                            fillColor: Colors.grey[300],
+                            padding: EdgeInsets.all(15.0),
+                          )
+                      ),
 
-                    //Racks Management --> #2 Icon-Button
-                    Container(
-                        child: RawMaterialButton(
-                          onPressed: (){
-                            setState(() {
-                              Navigator.pushNamed(context, '/rack_add');
-                            });
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.add_circle_outline, size: 60.0, color: Colors.green[600],),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: Text("Aggiungi Rastrelliera",
-                                  style: TextStyle(
-                                      fontSize: 18.0
+                      //Racks Management --> #2 Icon-Button
+                      Container(
+                          child: RawMaterialButton(
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(context, '/rack_add');
+                              });
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.add_circle_outline, size: 60.0, color: Colors.green[600],),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3.0),
+                                  child: Text("Aggiungi Rastrelliera",
+                                    style: TextStyle(
+                                        fontSize: 18.0
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          elevation: 2.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(18.0),
-                              )
-                          ),
-                          fillColor: Colors.grey[300],
-                          padding: EdgeInsets.all(15.0),
-                        )
-                    ),
+                                )
+                              ],
+                            ),
+                            elevation: 2.0,
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(18.0),
+                                )
+                            ),
+                            fillColor: Colors.grey[300],
+                            padding: EdgeInsets.all(15.0),
+                          )
+                      ),
 
-                    //Racks Management --> #2 Icon-Button
-                    Container(
-                        child: RawMaterialButton(
-                          onPressed: (){
-                            setState(() {
-                              Navigator.pushNamed(context, '/rack_remove');
-                            });
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.remove_circle_outline, size: 60.0, color: Colors.red[800],),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: Text("Rimuovi Rastrelliera",
-                                  style: TextStyle(
-                                      fontSize: 18.0
+                      //Racks Management --> #2 Icon-Button
+                      Container(
+                          child: RawMaterialButton(
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(context, '/rack_remove');
+                              });
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.remove_circle_outline, size: 60.0, color: Colors.red[800],),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3.0),
+                                  child: Text("Rimuovi Rastrelliera",
+                                    style: TextStyle(
+                                        fontSize: 18.0
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          elevation: 2.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(18.0),
-                              )
-                          ),
-                          fillColor: Colors.grey[300],
-                          padding: EdgeInsets.all(15.0),
-                        )
-                    ),
-                  ],
+                                )
+                              ],
+                            ),
+                            elevation: 2.0,
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(18.0),
+                                )
+                            ),
+                            fillColor: Colors.grey[300],
+                            padding: EdgeInsets.all(15.0),
+                          )
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],
@@ -383,103 +387,107 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    //Reports Management --> #1
-                    Container(
-                        child: RawMaterialButton(
-                          onPressed: (){
-                            setState(() {
-                              Navigator.pushNamed(context, '');
-                            });
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.list, size: 60.0, color: Colors.grey[800],),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: Text("Lista Segnalazioni",
-                                  style: TextStyle(
-                                      fontSize: 18.0
+                child: SizedBox(
+                  width: 200.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      //Reports Management --> #1
+                      Container(
+                          child: RawMaterialButton(
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(context, '/report_page');
+                              });
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.list, size: 60.0, color: Colors.grey[800],),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3.0),
+                                  child: Text("Lista Segnalazioni",
+                                    style: TextStyle(
+                                        fontSize: 18.0
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          elevation: 2.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(18.0),
-                              )
-                          ),
-                          fillColor: Colors.grey[300],
-                          padding: EdgeInsets.all(15.0),
-                        )
-                    ),
-                    //Reports Management --> #1 Icon-Button
-                    Container(
-                        child: RawMaterialButton(
-                          onPressed: (){
-                            setState(() {
-                              Navigator.pushNamed(context, '/racks_report');
-                            });
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.report_problem, size: 60.0, color: Colors.red[700],),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: Text("Segnala Rastrelliera",
-                                  style: TextStyle(
-                                      fontSize: 18.0
+                                )
+                              ],
+                            ),
+                            elevation: 2.0,
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(18.0),
+                                )
+                            ),
+                            fillColor: Colors.grey[300],
+                            padding: EdgeInsets.all(15.0),
+                          )
+                      ),
+                      //Reports Management --> #1 Icon-Button
+                      Container(
+                          child: RawMaterialButton(
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(context, '/racks_report');
+                              });
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.report_problem, size: 60.0, color: Colors.red[700],),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3.0),
+                                  child: Text("Segnala Rastrelliera",
+                                    style: TextStyle(
+                                        fontSize: 18.0
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          elevation: 2.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(18.0),
-                              )
-                          ),
-                          fillColor: Colors.grey[300],
-                          padding: EdgeInsets.all(15.0),
-                        )
-                    ),
-                    //Reports Management --> #2 Icon-Button
-                    Container(
-                        child: RawMaterialButton(
-                          onPressed: (){
-                            setState(() {
-                              Navigator.pushNamed(context, '/bikes_report');
-                            });
-                          },
-                          child: Column(
-                            children: <Widget>[
-                              Icon(Icons.report_problem, size: 60.0, color: Colors.red[700],),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 3.0),
-                                child: Text("Segnala Bicicletta",
-                                  style: TextStyle(
-                                      fontSize: 18.0
+                                )
+                              ],
+                            ),
+                            elevation: 2.0,
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(18.0),
+                                )
+                            ),
+                            fillColor: Colors.grey[300],
+                            padding: EdgeInsets.all(15.0),
+                          )
+                      ),
+                      //Reports Management --> #2 Icon-Button
+                      Container(
+                          child: RawMaterialButton(
+                            onPressed: (){
+                              setState(() {
+                                Navigator.pushNamed(context, '/bikes_report');
+                              });
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.report_problem, size: 60.0, color: Colors.red[700],),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3.0),
+                                  child: Text("Segnala Bicicletta",
+                                    style: TextStyle(
+                                        fontSize: 18.0
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                          elevation: 2.0,
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(18.0),
-                              )
-                          ),
-                          fillColor: Colors.grey[300],
-                          padding: EdgeInsets.all(15.0),
-                        )
-                    ),
-                  ],
+                                )
+                              ],
+                            ),
+                            elevation: 2.0,
+                            shape: new RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(18.0),
+                                )
+                            ),
+                            fillColor: Colors.grey[300],
+                            padding: EdgeInsets.all(15.0),
+                          )
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

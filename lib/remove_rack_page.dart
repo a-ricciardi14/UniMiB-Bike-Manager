@@ -5,18 +5,14 @@ import 'package:unimib_bike_manager/functions/requests.dart';
 import 'package:unimib_bike_manager/model/rack.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
-
 import 'dart:async';
 
-//TODO: Implementare DropDownMenù per visualizzare la lista di rastrelliere (funzionante, ma con errore => [ERROR:flutter/lib/ui/ui_dart_state.cc(157)] Unhandled Exception: type 'int' is not a subtype of type 'String'.
 
 class RemoveRack extends StatefulWidget {
 
   final User user;
 
-  RemoveRack({Key key, @required this.user}) :
-        assert (user != null),
-        super(key: key);
+  RemoveRack({Key key, @required this.user}) :assert (user != null), super(key: key);
 
   @override
   _RemoveRackState createState() => _RemoveRackState();
@@ -25,7 +21,6 @@ class RemoveRack extends StatefulWidget {
 class _RemoveRackState extends State<RemoveRack> {
   User get _user => widget.user;
 
-  final _formKey = GlobalKey<FormState>();
   bool _request = false;
 
   TextEditingController _controller = new TextEditingController();
@@ -70,7 +65,6 @@ class _RemoveRackState extends State<RemoveRack> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-
             new DropdownButton(
               isExpanded: true,
               value: _rackSelected,

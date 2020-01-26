@@ -13,9 +13,7 @@ import 'package:unimib_bike_manager/functions/requests.dart';
 class RacksReportPage extends StatefulWidget {
   final User user;
 
-  RacksReportPage({Key key, @required this.user})
-      : assert(user != null),
-        super(key: key);
+  RacksReportPage({Key key, @required this.user}): assert(user != null), super(key: key);
 
   @override
   _RacksReportPage createState() => _RacksReportPage();
@@ -79,7 +77,6 @@ class _RacksReportPage extends State<RacksReportPage> {
                   value: _rackSelected,
                   items: _rack.map((rack){
                     return new DropdownMenuItem(
-
                       child: Row(
                         children: <Widget>[
                           new Icon(Icons.apps),
@@ -134,8 +131,7 @@ class _RacksReportPage extends State<RacksReportPage> {
                     onPressed: _request ? null : () {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
-
-                        postReport(_rackSelected.id.toString(), description, _user.hashCode).then((value) {
+                        postReport('Rack: '+_rackSelected.id.toString(), description, _user.mEmail).then((value) {
                           showErrorDialog(context, S.of(context).success,
                               S.of(context).rep_received);
                           setState(() => _request = false);
@@ -155,5 +151,4 @@ class _RacksReportPage extends State<RacksReportPage> {
       ),
     );
   }
-
 }

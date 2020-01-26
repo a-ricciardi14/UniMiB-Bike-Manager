@@ -5,7 +5,6 @@ import 'package:unimib_bike_manager/model/rack.dart';
 import 'package:unimib_bike_manager/rack_tools_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
-
 import 'drawer.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 import 'model/user.dart';
@@ -76,7 +75,6 @@ class _RacksPage extends State<RacksPage> {
                                   MaterialPageRoute(builder: (context) => RackToolsPage(user: _user, rack: _rackChosen)));
                             },
                             child: Column(
-                              //mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -89,7 +87,6 @@ class _RacksPage extends State<RacksPage> {
                                       child: Text(
                                         rackSnap
                                             .data.racks[index].locationDescription,
-                                        //style: TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     subtitle: Padding(
@@ -196,15 +193,5 @@ class _RacksPage extends State<RacksPage> {
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-    double result;
-
-    Geolocator().distanceBetween(lat1, lon1, lat2, lon2).then((distance) {
-      result = distance;
-    });
-
-    return result;
   }
 }

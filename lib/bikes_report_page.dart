@@ -12,24 +12,27 @@ import 'package:unimib_bike_manager/functions/requests.dart';
 class BikesReportPage extends StatefulWidget {
   final User user;
 
-  BikesReportPage({Key key, @required this.user})
-      : assert(user != null),
-        super(key: key);
+  BikesReportPage({Key key, @required this.user}): assert(user != null), super(key: key);
 
   @override
   _BikesReportPage createState() => _BikesReportPage();
 }
 
 class _BikesReportPage extends State<BikesReportPage> {
+  User get _user => widget.user;
+
+
   final _formKey = GlobalKey<FormState>();
   bool _request = false;
-  User get _user => widget.user;
+
   String qrCode = '';
-  TextEditingController controller = new TextEditingController();
+  TextEditingController idController = new TextEditingController();
+  TextEditingController descController = new TextEditingController();
 
   @override
   void dispose() {
-    controller.dispose();
+    idController.dispose();
+    descController.dispose();
     super.dispose();
   }
 
@@ -55,14 +58,14 @@ class _BikesReportPage extends State<BikesReportPage> {
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: new Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Row(
+              new Row(
                 children: <Widget>[
                   Flexible(
-                    child: TextFormField(
-                      controller: controller,
+                    child: new TextFormField(
+                      controller: idController,
                       decoration:
                           InputDecoration(
                               labelText:
@@ -88,7 +91,8 @@ class _BikesReportPage extends State<BikesReportPage> {
                 ],
               ),
               SizedBox(height: 12.0,),
-              TextFormField(
+              new TextFormField(
+                controller: descController,
                 decoration:
                     InputDecoration(
                         labelText:
@@ -126,7 +130,7 @@ class _BikesReportPage extends State<BikesReportPage> {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
 
-                        postReport(bikeId, description, _user.hashCode).then((value) {
+                        postReport('Bike: '+bikeId, description, _user.mEmail).then((value){
                           showErrorDialog(context, S.of(context).success,
                               S.of(context).rep_received);
                           setState(() => _request = false);
@@ -152,7 +156,7 @@ class _BikesReportPage extends State<BikesReportPage> {
     try {
       String result = await BarcodeScanner.scan();
       setState(() => this.qrCode = result);
-      setState(() => this.controller.text = result);
+      setState(() => this.idController.text = result);
 
       /*await BarcodeScanner.scan().then((value) => setState((){
         this.controller.text = value;

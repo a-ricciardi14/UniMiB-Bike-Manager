@@ -5,11 +5,10 @@ import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
 import 'package:unimib_bike_manager/drawer.dart';
-
 import 'package:unimib_bike_manager/model/bike.dart';
 import 'package:unimib_bike_manager/bike_tools_page.dart';
-
 import 'model/rack.dart';
+
 
 class BikesPage extends StatefulWidget {
 
@@ -31,7 +30,6 @@ class _BikesPageState extends State<BikesPage> {
   @override
   void initState() {
     bikeList = fetchBikeList();
-
     super.initState();
   }
 
@@ -57,8 +55,8 @@ class _BikesPageState extends State<BikesPage> {
                           ? 0
                           : bikeSnap.data.bikes.length,
                       itemBuilder: (context, int index) {
-                        _rack = bikeSnap.data.bikes[index].rack;
 
+                        _rack = bikeSnap.data.bikes[index].rack;
                         return Card(
                           margin: EdgeInsets.all(5.0),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),

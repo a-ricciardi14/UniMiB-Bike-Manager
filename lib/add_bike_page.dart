@@ -28,8 +28,6 @@ class _AddBikeState extends State<AddBike> {
 
   TextEditingController _controllerId = new TextEditingController();
   TextEditingController _controllerUnlockCode = new TextEditingController();
-
-
   Rack _rackSelected;
   List _rack = List();
 
@@ -111,6 +109,7 @@ class _AddBikeState extends State<AddBike> {
                   Flexible(
                     child: TextFormField(
                       keyboardType: TextInputType.number,
+                      maxLength: 4,
                       controller: _controllerUnlockCode,
                       decoration:
                       InputDecoration(
@@ -125,10 +124,10 @@ class _AddBikeState extends State<AddBike> {
                         if (value.isEmpty) {
                           _unlockCode = null;
                         } else {
-                          if(_controllerUnlockCode.text.length == 4){
-                            _unlockCode = int.parse(value);
-                          }else{
+                          if(_controllerUnlockCode.text.length < 4){
                             return S.of(context).pass_wrong;
+                          }else{
+                            _unlockCode = int.parse(value);
                           }
                         }
                       },
@@ -142,7 +141,6 @@ class _AddBikeState extends State<AddBike> {
                   value: _rackSelected,
                   items: _rack.map((rack){
                     return new DropdownMenuItem(
-
                       child: Row(
                         children: <Widget>[
                           new Icon(Icons.apps),
@@ -155,7 +153,6 @@ class _AddBikeState extends State<AddBike> {
                   }).toList(),
                   hint: new Text("Seleziona Rastrelliera"),
                   onChanged: (newVal) {
-                    print("You Selected: " + newVal.id.toString());
                     setState(() {
                       _rackSelected = newVal;
                     });
@@ -174,7 +171,7 @@ class _AddBikeState extends State<AddBike> {
                     ),
                     child: _request
                         ? CircularProgressIndicator()
-                        : Text("Salva",style: TextStyle(color: Colors.white),),
+                        : Text("Salva", style: TextStyle(color: Colors.white),),
                     onPressed: _request ? null : () {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);

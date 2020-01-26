@@ -4,7 +4,6 @@ import 'package:unimib_bike_manager/drawer.dart';
 import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:flutter/services.dart';
-
 import 'functions/requests.dart';
 import 'generated/i18n.dart';
 
@@ -12,9 +11,7 @@ import 'generated/i18n.dart';
 class AddRack extends StatefulWidget {
 
   final User user;
-  AddRack({Key key, @required this.user}) :
-      assert (user != null),
-        super(key: key);
+  AddRack({Key key, @required this.user}) : assert (user != null), super(key: key);
 
   @override
   _AddRackState createState() => _AddRackState();
@@ -86,7 +83,7 @@ class _AddRackState extends State<AddRack> {
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return S.of(context).bike_empty;
+                          return S.of(context).rack_empty;
                         } else {
                           _rackId = value;
                         }
@@ -117,7 +114,7 @@ class _AddRackState extends State<AddRack> {
                     if (value.isEmpty) {
                       _capacity = 0;
                     } else {
-                      if(_controllerCapacity.text.length <= 10){
+                      if(int.parse(value) <= 10){
                         _capacity = int.parse(value);
                       }else{
                         return S.of(context).wrong;

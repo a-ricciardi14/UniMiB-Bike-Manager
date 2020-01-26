@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
-
 import 'login/login_event.dart';
 import 'login/login_state.dart';
 import 'login/login_bloc.dart';
-
 import 'model/user.dart';
-
 import 'package:unimib_bike_manager/authentication/authentication_bloc.dart';
+
 
 class LoginPage extends StatefulWidget {
   final User user;
 
-  LoginPage({Key key, @required this.user})
-      : assert(user != null),
-        super(key: key);
+  LoginPage({Key key, @required this.user}): assert(user != null), super(key: key);
 
   @override
   _LoginPage createState() => _LoginPage();
@@ -98,80 +94,80 @@ class _LoginPage extends State<LoginPage> {
 
                 return Center(
                     child: Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          'Bikes Manager',
-                          style: TextStyle(fontSize: 40.0, color: Colors.white),
-                        ),
-                        SizedBox(height: 40.0,),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return S.of(context).emailEmpty;
-                            } else {
-                              _email = value;
-                            }
-                          },
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            suffixIcon: IconButton(
-                              icon: (_obscureText
-                                  ? Icon(Icons.visibility_off)
-                                  : Icon(Icons.visibility)),
-                              onPressed: _toggleObscureText,
+                      key: _formKey,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'Bikes Manager',
+                              style: TextStyle(fontSize: 40.0, color: Colors.white),
                             ),
-                          ),
-                          obscureText: _obscureText,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return S.of(context).passwordEmpty;
-                            } else {
-                              _password = value;
-                            }
-                          },
+                            SizedBox(height: 40.0,),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Email',
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return S.of(context).emailEmpty;
+                                } else {
+                                  _email = value;
+                                }
+                                },
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                suffixIcon: IconButton(
+                                  icon: (_obscureText
+                                      ? Icon(Icons.visibility_off)
+                                      : Icon(Icons.visibility)),
+                                  onPressed: _toggleObscureText,
+                                ),
+                              ),
+                              obscureText: _obscureText,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return S.of(context).passwordEmpty;
+                                } else {
+                                  _password = value;
+                                }
+                              },
+                            ),
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            SwitchListTile(
+                              title: Text(S.of(context).remember_me),
+                              value: _rememberMe,
+                              onChanged: (bool value) {
+                                setState(() {
+                                  _rememberMe = value;
+                                });
+                              },
+                            ),
+                            Container(
+                              height: 30.0,
+                            ),
+                            SizedBox(
+                              width: 200.0,
+                              child: RaisedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState.validate()) {
+                                    loginBloc.dispatch(LoginButtonPressed(
+                                        email: _email, password: _password,remember: _rememberMe));
+                                  }
+                                },
+                                child: Text(S.of(context).login,
+                                    style: TextStyle(color: Colors.white,fontSize: 15.0),),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        SwitchListTile(
-                          title: Text(S.of(context).remember_me),
-                          value: _rememberMe,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _rememberMe = value;
-                            });
-                          },
-                        ),
-                        Container(
-                          height: 30.0,
-                        ),
-                        SizedBox(
-                          width: 200.0,
-                          child: RaisedButton(
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                loginBloc.dispatch(LoginButtonPressed(
-                                    email: _email, password: _password,remember: _rememberMe));
-                              }
-                            },
-                            child: Text(S.of(context).login,
-                                style: TextStyle(color: Colors.white,fontSize: 15.0),),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
                 );
               }),
         ),

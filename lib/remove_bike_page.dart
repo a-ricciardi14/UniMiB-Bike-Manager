@@ -9,13 +9,10 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 
-
 class RemoveBike extends StatefulWidget {
 
   final User user;
-  RemoveBike({Key key, @required this.user}) :
-        assert (user != null),
-        super(key: key);
+  RemoveBike({Key key, @required this.user}) :assert (user != null), super(key: key);
 
   @override
   _RemoveBikeState createState() => _RemoveBikeState();
@@ -60,7 +57,6 @@ class _RemoveBikeState extends State<RemoveBike> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-
               new Row(
                 children: <Widget>[
                   new Flexible(
@@ -77,7 +73,7 @@ class _RemoveBikeState extends State<RemoveBike> {
                       ),
                       validator: (value) {
                         if (value.isEmpty) {
-                          return S.of(context).rack_empty;
+                          return S.of(context).bike_empty;
                         } else {
                           bikeId = value;
                         };
@@ -100,17 +96,15 @@ class _RemoveBikeState extends State<RemoveBike> {
                           borderRadius: new BorderRadius.circular(18.0),
                           side: BorderSide(color: Colors.red)
                       ),
-                      child: Text('Salva', style: TextStyle(color: Colors.white),),
+                      child: _request ? CircularProgressIndicator()
+                          : Text('Salva', style: TextStyle(color: Colors.white),),
                       onPressed: (){
                         if(_formKey.currentState.validate()){
 
                           fetchBikeInfo(bikeId).then((_bike){
                             setState(() => _request = true);
 
-                            //print("Bike State: " + _bike.bikeState);
-
-                            if(_bike.bikeState == "Disponibile"){
-                              print('This is BIKE_ID: ' + bikeId);
+                            if(_bike.bikeState == "Disponibile" || _bike.bikeState == "Manutenzione"){
                               deleteBike(bikeId).then((value){
                                 showErrorDialog(context, S.of(context).bike_deleted, "Bicicletta eliminata!");
                                 setState(() => _request = false);
@@ -119,7 +113,7 @@ class _RemoveBikeState extends State<RemoveBike> {
                                 setState(() => _request = false);
                               });
                             }else{
-                              showErrorDialog(context, S.of(context).bike_not_avaiable, "Bicicletta prenotata!");
+                              showErrorDialog(context, S.of(context).bike_not_avaiable, "Non puoi scegliere questa bicicletta");
                               setState(() => _request = false);
                             }
                           }).catchError((e){

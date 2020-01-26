@@ -6,6 +6,9 @@ import 'model/user.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 
 
+//TODO: fetchReportList() non funziona, i report vengono acquisiti dal backEnd, ma non esegue il ReportList.fromJson in model/report_list.
+
+
 class ReportsPage extends StatefulWidget {
   final User user;
   ReportsPage({Key key, @required this.user}) : super(key: key);
@@ -54,7 +57,6 @@ class _ReportsPageState extends State<ReportsPage> {
                           margin: EdgeInsets.all(5.0),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                           child: Column(
-                            //mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -65,8 +67,8 @@ class _ReportsPageState extends State<ReportsPage> {
                                     padding:
                                     EdgeInsets.symmetric(horizontal: 8.0),
                                     child: Text(
-                                      rackSnap
-                                          .data.reports[index].id,
+                                      "Report: " +
+                                      rackSnap.data.reports[index].id,
                                       //style: TextStyle(fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -90,26 +92,6 @@ class _ReportsPageState extends State<ReportsPage> {
                           ),
                         );
                       },
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Opacity(
-                        opacity: _user.mEmail != 'guest'
-                            ? (_user.renting != null ? 0.0 : 1.0)
-                            : 0.0,
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: FloatingActionButton(
-                            backgroundColor: Colors.red[600],
-                            child: Icon(Icons.add,),
-                            onPressed: (){
-                              setState(() {
-                                Navigator.pushNamed(context, '/rack_add');
-                              });
-                            },
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),

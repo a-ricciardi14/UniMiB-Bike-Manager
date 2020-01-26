@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:unimib_bike_manager/drawer.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 
-//TODO: Aggiungere a Card Segnalazioni --> onTap() Lista Segnalazioni.
-//TODO: Creare pagina per visualizzare la Lista Segnalazioni.
-
 
 class HomePage extends StatefulWidget {
 
   final User user;
 
-  HomePage({Key key, @required this.user}) : super(key: key);
+  HomePage({Key key, @required this.user}) : assert (user != null), super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -38,7 +35,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        //title: Text('Home Page'),
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),

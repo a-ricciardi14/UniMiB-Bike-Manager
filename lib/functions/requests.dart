@@ -114,9 +114,9 @@ Future<void> putEndRent(String rentId, String rackId) async {
 
 //funzione che fa il post di un report
 
-Future<void> postReport(String id, String desc, int _userId) async {
+Future<void> postReport(String id, String desc, String _uMail) async {
   final response = await http.post(UnimibBikeEndpointUtil.reports,
-      body: {'bike_id': id, 'description': desc, 'userId': _userId});
+      body: {'bike_id': id, 'description': desc, 'userId': _uMail});
   if (response.statusCode != 200) {
     throw Exception('Unable to post report');
   }
@@ -203,14 +203,14 @@ Future<void> deleteRack(String _rackId) async {
 
 //FUNZIONI X BICICLETTE
 
-Future<void> setBikeUnCode(int _cod, Bike _bike) async {
+Future<void> setBikeUnCode(int _unCod, Bike _bike) async {
   String url = UnimibBikeEndpointUtil.bikes + _bike.id.toString() + '/';
 
 
     final response = await http.put(
         url,
         body: {
-          'unlock_code' : _cod,
+          'unlock_code' : _unCod,
         });
 
     if (response.statusCode != 200) {
@@ -224,7 +224,6 @@ Future<void> setBikeDisp(int _disp, Bike _bike) async {
   final response = await http.put(
       url,
       body: {
-        'id' : _bike.id,
         'bike_state_id' : _disp,
       });
 

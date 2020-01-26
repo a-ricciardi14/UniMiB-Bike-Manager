@@ -1,5 +1,3 @@
-//TODO: Card Position Rack --> Aggiungere onTap() la funzione _showDialog() per la modifica del parametro oppure mostrare una input text tipo googleMaps per la posizione.
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -13,6 +11,10 @@ import 'package:unimib_bike_manager/model/rack.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/drawer.dart';
 import 'package:geolocator/geolocator.dart';
+
+
+//TODO: Card Position Rack --> Aggiungere onTap() la funzione _showDialog() per la modifica del parametro come mostrare una input text come googleMaps per la posizione. (SERVE KEY GOOGLE MAPS)
+//TODO: Ottimizzare _showRackBikes(), ridimensionamento dell'AllertDialog().
 
 class RackToolsPage extends StatefulWidget {
   final User user;
@@ -62,11 +64,12 @@ class _RackToolsPageState extends State<RackToolsPage> {
                 MaterialButton(
                   elevation: 5.0,
                   textColor: Colors.red[600],
-                  child: Text("Salva"),
+                  child: _request ? CircularProgressIndicator()
+                      : Text("Salva"),
                   onPressed: _request ? null : () {
                     if (_formKey.currentState.validate()) {
                       setState(() => _request = true);
-                      setRacksParameters(key, _rack).then((value) {
+                      setRacksParameters(_localDesc, _rack).then((value) {
                         showErrorDialog(context, S.of(context).success,
                             'Parametro modificato!');
                         setState(() => _request = false);
@@ -105,7 +108,8 @@ class _RackToolsPageState extends State<RackToolsPage> {
                 MaterialButton(
                     elevation: 5.0,
                     textColor: Colors.red[600],
-                    child: Text("Salva"),
+                    child: _request ? CircularProgressIndicator()
+                        : Text("Salva"),
                     onPressed: _request ? null : () {
                       if (_formKey.currentState.validate()) {
                         setState(() => _request = true);
@@ -182,14 +186,15 @@ class _RackToolsPageState extends State<RackToolsPage> {
   }
 
   GoogleMapController mapController;
-  Future<Position> currentLocation;
+  //Future<Position> currentLocation;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  //funzione uguale a quella presente in map
-  Future<Position> fetchLocation() async {
-    return Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  }
+//  //funzione uguale a quella presente in map
+//  Future<Position> fetchLocation() async {
+//    return Geolocator()
+//        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//  }
 
   Set<Marker> initMarker(BuildContext context, Rack rack){
     Set<Marker> set = Set<Marker>();
@@ -392,7 +397,7 @@ class _RackToolsPageState extends State<RackToolsPage> {
 
   Future<void> _onRefresh() async {
     setState(() {
-      currentLocation = fetchLocation();
+      //currentLocation = fetchLocation();
     });
   }
 }

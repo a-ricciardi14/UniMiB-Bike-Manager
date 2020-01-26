@@ -3,9 +3,12 @@ import 'package:unimib_bike_manager/drawer.dart';
 import 'package:unimib_bike_manager/functions/functions.dart';
 import 'package:unimib_bike_manager/functions/requests.dart';
 import 'package:unimib_bike_manager/generated/i18n.dart';
-
 import 'model/bike.dart';
 import 'model/user.dart';
+
+
+//TODO: Ottimizzare _dispoDialog() x visualizzazione corretta della scelta di disponibilità.
+
 
 class BikeToolsPage extends StatefulWidget {
   final User user;
@@ -21,56 +24,64 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
   User get _user => widget.user;
   Bike get _bike => widget.bike;
 
-  String _bikeDisp = '';
-
+  final _formKey = GlobalKey<FormState>();
   bool _request = false;
-
 
   TextEditingController _editingController = new TextEditingController();
 
-  _unLockDialog(BuildContext context, int _cod) async {
-    _editingController.text = '';
+  _unLockDialog(BuildContext context) async {
+    int _unLock;
     return showDialog(
         context: context,
         builder: (context) {
-          return new AlertDialog(
-            title: Text("Modifica parametro: "),
-            content: new TextField(
-              keyboardType: TextInputType.number,
-              maxLength: 4,
-              controller: _editingController,
-            ),
-            actions: <Widget>[
-              MaterialButton(
-                  elevation: 5.0,
-                  textColor: Colors.red[600],
-                  child: Text("Salva"),
-                  onPressed: _request ? null : () {
-                    if (_editingController.text != null) {
-                      setState(() => _request = true);
-                      setBikeUnCode(_cod, _bike).then((value){
-                        showErrorDialog(context, S.of(context).success,
-                            'Parametro modificato!');
-                        setState(() => _request = false);
-                      }).catchError((e) {
-                        showErrorDialog(context, 'Ops!',
-                            S.of(context).service_exception);
-                        setState(() => _request = false);
-                      });
-                    } else {
-                      throw Exception('_editingController == null');
-                    }
+          return new Form(
+            key: _formKey,
+            child: new AlertDialog(
+              title: Text("Modifica parametro: "),
+              content: new TextFormField(
+                keyboardType: TextInputType.number,
+                maxLength: 4,
+                controller: _editingController,
+                validator: (value){
+                  if(value.isEmpty){
+                    return S.of(context).pass_wrong;
+                  }else{
+                    _unLock = int.parse(value);
                   }
-              )
-            ],
+                },
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                    elevation: 5.0,
+                    textColor: Colors.red[600],
+                    child: _request ? CircularProgressIndicator()
+                        : Text("Salva"),
+                    onPressed: _request ? null : () {
+                      if (_formKey.currentState.validate()) {
+                        setState(() => _request = true);
+                        setBikeUnCode(_unLock, _bike).then((value){
+                          showErrorDialog(context, S.of(context).success,
+                              'Parametro modificato!');
+                          setState(() => _request = false);
+                        }).catchError((e) {
+                          showErrorDialog(context, 'Ops!',
+                              S.of(context).service_exception);
+                          setState(() => _request = false);
+                        });
+                      }
+                    }
+                )
+              ],
+            ),
           );
         }
         );
   }
 
-  _dispoDialog(BuildContext context, String _disp) async {
-    int _selectedDisp;
-    List<int> _listDisp = [1, 4, 5];
+  _dispoDialog(BuildContext context) async {
+    String _selectedDisp;
+    int _disp;
+    List<String> _listDisp = ['Disponibile', 'Smarrita', 'Manutenzione'];
 
     return showDialog(
         context: context,
@@ -79,20 +90,30 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
             title: Text("Modifica disponibilità: "),
             content: new DropdownButton(
               isExpanded: true,
-              hint: Text('Scegli disponibilità'),
               value: _selectedDisp,
               items: _listDisp.map((value){
                 return new DropdownMenuItem(
-                    value: value,
-                    child: value == 1 ? new Text('Disponibile')
-                        : value == 4 ? new Text('Smarrita')
-                        : value == 5 ? new Text('Manutenzione')
-                        : null
+                    child: Row(
+                      children: <Widget>[
+                        new Icon(Icons.description),
+                        new SizedBox(width: 10.0,),
+                        new Text(value),
+                      ],
+                    ),
+                  value: value,
                 );
               }).toList(),
-              onChanged: (int newValue){
+              hint: new Text("Seleziona disponibilità"),
+              onChanged: (newVal){
                 setState(() {
-                  _selectedDisp = newValue;
+                  _selectedDisp = newVal;
+                  if(_selectedDisp == 'Disponibile'){
+                    _disp = 1;
+                  }else if(_selectedDisp == 'Smarrita'){
+                    _disp = 4;
+                  }else if(_selectedDisp == 'Manutenzione'){
+                    _disp = 5;
+                  }
                 });
                 },
             ),
@@ -102,9 +123,9 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
                   textColor: Colors.red[600],
                   child: Text("Salva"),
                   onPressed: _request ? null : () {
-                    if (_editingController.text != null) {
+                    if (_selectedDisp != null) {
                       setState(() => _request = true);
-                      setBikeDisp(_selectedDisp, _bike).then((value){
+                      setBikeDisp(_disp, _bike).then((value){
                         showErrorDialog(context, S.of(context).success,
                             'Parametro modificato!');
                         setState(() => _request = false);
@@ -113,8 +134,6 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
                             S.of(context).service_exception);
                         setState(() => _request = false);
                       });
-                    } else {
-                      throw Exception('_editingController == null');
                     }
                   }
               )
@@ -123,7 +142,6 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
         }
     );
   }
-
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -171,7 +189,7 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
                 child: InkWell(
                   onTap: (){
-                    _unLockDialog(context, _bike.unlockCode);
+                    _unLockDialog(context);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -191,11 +209,16 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
                 child: InkWell(
                   onTap: (){
                     if(_bike.bikeState == 'Prenotata' || _bike.bikeState == 'Noleggiata'){
-                      new AlertDialog(
-                        title: Text('Non puoi modificare la Disponibilità di questa Bicicletta'),
+                      return showDialog(
+                        context: context,
+                        builder: (context){
+                          return new AlertDialog(
+                            title: Text('Non puoi modificare la Disponibilità di questa Bicicletta'),
+                          );
+                        },
                       );
                     }else{
-                      _dispoDialog(context, _bike.bikeState);
+                      _dispoDialog(context);
                     }
                   },
                   child: Padding(
@@ -216,13 +239,17 @@ class _BikeToolsPageState extends State<BikeToolsPage> {
                 color: Colors.red[600],
                 child: InkWell(
                   onTap: (){
-                    setState(() => _request = true);
-
+                    if(_bike.bikeState == "Disponibile" || _bike.bikeState == "Manutenzione") {
+                      setState(() => _request = true);
                       deleteBike(_bike.id.toString()).then((value) {
                         showErrorDialog(context, S.of(context).success,
                             S.of(context).bike_deleted);
                         setState(() => _request = false);
                       });
+                    }else{
+                      showErrorDialog(context, S.of(context).bike_not_avaiable, "Non puoi scegliere questa bicicletta");
+                      setState(() => _request = false);
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),

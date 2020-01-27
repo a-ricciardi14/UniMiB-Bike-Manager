@@ -142,7 +142,6 @@ class Rack {
       str += ', buildings=' + buildings.toString();
     }
     str += ', distance=' + distance + '}';
-
     return str;
   }
 

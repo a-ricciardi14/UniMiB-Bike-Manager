@@ -9,6 +9,7 @@ import 'package:unimib_bike_manager/authentication/authentication_event.dart';
 
 
 class MyDrawer extends StatelessWidget {
+
   final User user;
 
   MyDrawer({Key key, @required this.user})

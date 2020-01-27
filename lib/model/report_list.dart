@@ -1,6 +1,7 @@
 import 'report.dart';
 
 class ReportList{
+
   List<Report> _reports;
 
   ReportList(this._reports);

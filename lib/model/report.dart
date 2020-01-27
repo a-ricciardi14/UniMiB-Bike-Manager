@@ -75,5 +75,4 @@ class Report {
         ', Image=' + image + '\'' +
         '}';
   }
-
 }

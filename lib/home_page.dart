@@ -6,7 +6,6 @@ import 'package:unimib_bike_manager/model/user.dart';
 //TODO: Creare pagina per visualizzare la Lista Segnalazioni.
 
 class HomePage extends StatefulWidget {
-
   final User user;
 
   HomePage({Key key, @required this.user}) : assert (user != null), super(key: key);

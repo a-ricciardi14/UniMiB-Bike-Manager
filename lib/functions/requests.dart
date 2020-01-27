@@ -166,6 +166,7 @@ Future<void> setRacksParameters(var key, Rack _rack) async {
   }
 }
 
+
 Future<void> addRack(int _rackId, int _capacity, String _locatDesc) async {
   String url = UnimibBikeEndpointUtil.racks;
 

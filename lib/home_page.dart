@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:unimib_bike_manager/drawer.dart';
 import 'package:unimib_bike_manager/model/user.dart';
 
+//TODO: Aggiungere a Card Segnalazioni --> onTap() Lista Segnalazioni.
+//TODO: Creare pagina per visualizzare la Lista Segnalazioni.
 
 class HomePage extends StatefulWidget {
 
@@ -119,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                             children: <Widget>[
                               Icon(Icons.settings, size: 60.0, color: Colors.grey[800],),
                               Padding(
+
                                 padding: const EdgeInsets.only(top: 3.0),
                                 child: Text("Gestisci Biciclette",
                                   style: TextStyle(

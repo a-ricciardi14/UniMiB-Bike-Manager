@@ -5,9 +5,7 @@ import 'package:unimib_bike_manager/model/user.dart';
 import 'package:unimib_bike_manager/authentication/authentication_bloc.dart';
 import 'package:unimib_bike_manager/authentication/authentication_event.dart';
 
-
 //TODO: Ottimizzare chiusura automatica ExpansionTile.
-
 
 
 class MyDrawer extends StatelessWidget {
@@ -39,7 +37,7 @@ class MyDrawer extends StatelessWidget {
 
             //Drawer --> HomePage()
             ListTile(
-              leading: Icon(Icons.home, color: Colors.red[800],),
+              leading: Icon(Icons.home, color: Colors.black,),
               title: Text('Home Page'),
               onTap: () {
                 Navigator.pushNamed(context,'/home_page');
@@ -84,19 +82,19 @@ class MyDrawer extends StatelessWidget {
 
             //Drawer --> RacksManagement
             ExpansionTile(
-              leading: Icon(Icons.apps, color: Colors.black,),
+              leading: Icon(Icons.apps, color: Colors.black),
               backgroundColor: Colors.grey[200],
-              title: Text('Gestione Rastrelliere',
+              title: Text(
+                'Gestione Rastrelliere',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.black
                 ),
               ),
-
               children: <Widget>[
                 ListTile(
                   leading: Icon(Icons.settings, color: Colors.grey[800],),
-                  title: Text('Gestisci Rastrielliera'),
+                  title: Text('Gestisci Rastrelliera'),
                   onTap: () {
                     Navigator.pushNamed(context,'/rack_list');
                   },
@@ -110,7 +108,7 @@ class MyDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(Icons.remove_circle_outline, color: Colors.red[800],),
-                  title: Text('Rimuovi Rastrelliera'),
+                  title: Text('Rimuovi Rastrellioera'),
                   onTap: () {
                     Navigator.pushNamed(context,'/rack_remove');
                   },
@@ -156,7 +154,7 @@ class MyDrawer extends StatelessWidget {
 
             //Drawer --> LogOut
             ListTile(
-               leading: Icon(Icons.power_settings_new, color: Colors.red[800],),
+               leading: Icon(Icons.power_settings_new, color: Colors.red[900],),
                title: Text(S.of(context).logout),
                onTap: () {
                  //Chiudo il drawer per evitare errori

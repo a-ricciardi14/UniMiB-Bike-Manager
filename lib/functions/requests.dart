@@ -129,14 +129,14 @@ Future<ReportList> fetchReportsList() async {
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
+
+    print(json.decode(response.body));
     return ReportList.fromJson(json.decode(response.body));
   } else {
     throw Exception('Failed to load report list');
   }
 }
 
-
-//TODO: Implementare richiesta BackEnd --> addRAck(int, int, String) #funzione non testata.
 
 //FUNZIONI PER RASTRELLIERE
 
@@ -177,8 +177,8 @@ Future<void> addRack(int _rackId, int _capacity, String _locatDesc) async {
       'locationDescription' : _locatDesc,
       'latitude' : null,
       'longitude' : null,
-      'streetAddress' : '',
-      'addressLocality' : '',
+      'streetAddress' : null,
+      'addressLocality' : null,
     }
   );
 
@@ -202,6 +202,18 @@ Future<void> deleteRack(String _rackId) async {
 
 
 //FUNZIONI X BICICLETTE
+
+Future<BikeList> fetchBikeList() async{
+  String url = UnimibBikeEndpointUtil.bikes;
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    return BikeList.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to load bike list');
+  }
+}
 
 Future<void> setBikeUnCode(int _unCod, Bike _bike) async {
   String url = UnimibBikeEndpointUtil.bikes + _bike.id.toString() + '/';
@@ -232,17 +244,7 @@ Future<void> setBikeDisp(int _disp, Bike _bike) async {
   }
 }
 
-Future<BikeList> fetchBikeList() async{
-  String url = UnimibBikeEndpointUtil.bikes;
 
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    return BikeList.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load bike list');
-  }
-}
 
 //funzione che fa il post() di una nuova biciletta
 Future<void> addBike(String bikeId, int unCode, String rackId) async {

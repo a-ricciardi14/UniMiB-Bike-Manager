@@ -109,7 +109,8 @@ class Rack {
           json['address_locality'],
           json['street_address'],
           json['location_description'],
-          null);
+          null
+      );
     }
   }
 

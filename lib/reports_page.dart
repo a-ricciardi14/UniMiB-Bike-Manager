@@ -12,6 +12,7 @@ import 'package:unimib_bike_manager/functions/requests.dart';
 class ReportsPage extends StatefulWidget {
   final User user;
   ReportsPage({Key key, @required this.user}) : super(key: key);
+
   @override
   _ReportsPageState createState() => _ReportsPageState();
 }
